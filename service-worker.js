@@ -1,9 +1,12 @@
-const CACHE_NAME = 'avtocom-cache-v1';
+const CACHE_NAME = 'avtocom-cache-v2';
 const CORE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon.svg'
+  './logo-512.png',
+  './logo-192.png',
+  './apple-touch-icon.png',
+  './favicon-32.png'
 ];
 self.addEventListener('install', (event) => {
   event.waitUntil(
