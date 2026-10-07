@@ -3,8 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="АВТОКОМ">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>АВТОКОМ</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 64'><g fill='none' stroke='%23475569' stroke-width='6' stroke-linejoin='miter' stroke-linecap='square'><path d='M3 61 L26 3 L49 61 Z'/><path d='M17 46 L26 22 L35 46 Z'/><path d='M97 3 L76 32 L97 61'/><path d='M83 3 L62 32 L83 61'/></g><g fill='%23475569'><path d='M53 3 L57 7 L53 11 L57 15 L53 19 L57 23 L53 27 L57 31 L53 35 L57 39 L53 43 L57 47 L53 51 L57 55 L53 59 L57 63 L53 63 L49 59 L53 55 L49 51 L53 47 L49 43 L53 39 L49 35 L53 31 L49 27 L53 23 L49 19 L53 15 L49 11 L53 7 Z'/><path d='M65 3 L69 7 L65 11 L69 15 L65 19 L69 23 L65 27 L69 31 L65 35 L69 39 L65 43 L69 47 L65 51 L69 55 L65 59 L69 63 L65 63 L61 59 L65 55 L61 51 L65 47 L61 43 L65 39 L61 35 L65 31 L61 27 L65 23 L61 19 L65 15 L61 11 L65 7 Z'/></g></svg>">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
 <style>
   :root {
     --bg:#eef2f7; --panel:#fff; --panel-2:#f8fafc;
@@ -8222,6 +8230,95 @@ document.addEventListener('keydown', e=>{
     render();
   }
 })();
+/* ============================================================
+   PWA: Service Worker и установка
+   ============================================================ */
+(function registerServiceWorker(){
+  /* SW работает только на http(s), а не на file:// */
+  if (!('serviceWorker' in navigator)) return;
+  if (location.protocol === 'file:') {
+    console.log('[PWA] Локальный файл — Service Worker пропущен');
+    return;
+  }
+
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then((reg) => {
+        console.log('[PWA] Service Worker зарегистрирован, scope:', reg.scope);
+
+        /* Следим за обновлением SW */
+        reg.addEventListener('updatefound', () => {
+          const newSW = reg.installing;
+          if (!newSW) return;
+          newSW.addEventListener('statechange', () => {
+            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+              showSwUpdateBanner();
+            }
+          });
+        });
+      })
+      .catch((e) => {
+        console.warn('[PWA] SW не зарегистрирован:', e.message);
+      });
+  });
+
+  /* После обновления SW — мягкая перезагрузка */
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+
+  /* Проверить обновление при возврате на вкладку */
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (reg) try { reg.update(); } catch(_){}
+      });
+    }
+  });
+})();
+
+function showSwUpdateBanner(){
+  if (document.getElementById('sw-update-banner')) return;
+  const bar = document.createElement('div');
+  bar.id = 'sw-update-banner';
+  bar.style.cssText =
+    'position:fixed;left:0;right:0;top:0;z-index:99997;' +
+    'background:linear-gradient(135deg,#059669,#047857);color:#fff;' +
+    'padding:10px 16px;font-size:13.5px;font-weight:500;' +
+    'display:flex;align-items:center;gap:14px;flex-wrap:wrap;' +
+    'box-shadow:0 4px 16px rgba(5,150,105,.35);';
+
+  const msg = document.createElement('span');
+  msg.style.flex = '1';
+  msg.innerHTML = '✨ <b>Доступно обновление приложения</b> — перезагрузите для применения';
+
+  const btn = document.createElement('button');
+  btn.textContent = '🔄 Обновить';
+  btn.style.cssText =
+    'background:#fff;color:#047857;padding:6px 14px;border-radius:6px;' +
+    'border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;';
+  btn.onclick = () => {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    }
+    setTimeout(() => window.location.reload(), 400);
+  };
+
+  const later = document.createElement('button');
+  later.textContent = 'Позже';
+  later.style.cssText =
+    'background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;' +
+    'padding:6px 12px;border-radius:6px;cursor:pointer;font-family:inherit;' +
+    'font-size:13px;font-weight:600;';
+  later.onclick = () => bar.remove();
+
+  bar.append(msg, btn, later);
+  document.body.appendChild(bar);
+  document.querySelector('header').style.marginTop = bar.offsetHeight + 'px';
+}
 </script>
 </body>
 </html>
