@@ -3465,8 +3465,161 @@ body.theme-dark .upload-image-box button{
 body.theme-dark .hotspot-editor{ background: var(--panel-2); }
 body.theme-dark .hs-row{ background: var(--panel); }
 body.theme-dark .hs-row input{ background: var(--panel-2); color: var(--text); border-color: var(--border-2); }
+/* === Кнопка закрытия глобального поиска === */
+.gs-close-btn{
+  cursor: pointer;
+  background: var(--panel);
+  border: 1px solid var(--border-2);
+  color: var(--text);
+  font-size: 16px;
+  padding: 5px 12px;
+  min-width: 40px;
+  height: 36px;
+  border-radius: 8px;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  flex: 0 0 auto;
+}
+.gs-close-btn:hover{
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+@media (max-width: 900px){
+  .gs-close-btn{
+    min-width: 48px;
+    height: 48px;
+    font-size: 20px;
+    padding: 0;
+  }
+}
+/* ============================================================
+   FAQ — АККОРДЕОН
+   ============================================================ */
+.faq-accordion{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.faq-item{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color .18s, box-shadow .18s;
+}
+.faq-item:hover{
+  border-color: var(--border-2);
+  box-shadow: var(--shadow-sm);
+}
+.faq-item.open{
+  border-color: var(--primary);
+  box-shadow: 0 4px 20px rgba(37,99,235,.10);
+}
+.faq-q{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.4;
+  transition: background .15s;
+}
+.faq-q:hover{
+  background: var(--panel-2);
+}
+.faq-item.open .faq-q{
+  background: linear-gradient(180deg, var(--panel-2) 0%, var(--panel) 100%);
+}
+.faq-q .faq-mark{
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+}
+.faq-item.open .faq-mark{
+  background: var(--primary);
+  color: #fff;
+}
+.faq-q .faq-question{
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+.faq-q .faq-arrow{
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--text-3);
+  transition: transform .22s ease;
+}
+.faq-item.open .faq-arrow{
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+.faq-a{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .28s cubic-bezier(.4,0,.2,1);
+}
+.faq-item.open .faq-a{
+  max-height: 2000px;
+}
+.faq-a-inner{
+  padding: 4px 20px 18px 66px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-2);
+  word-wrap: break-word;
+}
+.faq-a-inner p{ margin: 0 0 10px; }
+.faq-a-inner ul,.faq-a-inner ol{ margin: 0 0 10px 20px; }
+.faq-a-inner code{
+  background: var(--panel-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace,Menlo,Consolas,monospace;
+  font-size: 12.5px;
+}
+.faq-a-inner a{ color: var(--primary); }
+.faq-a-actions{
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.faq-a-tags{
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+body.theme-dark .faq-item{ background: var(--panel); }
+body.theme-dark .faq-q:hover{ background: var(--panel-2); }
+@media (max-width: 700px){
+  .faq-q{ padding: 14px 16px; font-size: 14px; }
+  .faq-q .faq-mark{ width: 28px; height: 28px; font-size: 13px; }
+  .faq-a-inner{ padding: 4px 16px 16px 16px; }
+}
+
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script></head>
+</head>
 <body class="theme-light">
 
 <header>
@@ -3488,7 +3641,7 @@ body.theme-dark .hs-row input{ background: var(--panel-2); color: var(--text); b
 <div class="toast-host" id="toastHost"></div>
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791380281492,"version":1,"appVersion":"1.0.0","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
+<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791460812348,"version":1,"appVersion":"1.0.0","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"applicants":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true,"instructions":true,"faq":true,"wiring":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"notes":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
 <script>
 
 /* ============================================================
@@ -4072,6 +4225,60 @@ function toast(msg,type){
   host.appendChild(el);
   requestAnimationFrame(()=>el.classList.add('show'));
   setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); },3200);
+}
+/* ============================================================
+   КОПИРОВАНИЕ В БУФЕР
+   ============================================================ */
+function copyToClipboard(text, label){
+  const str = String(text == null ? '' : text);
+  const done = () => toast((label ? label + ' — ' : '') + 'скопировано', 'success');
+  const fail = () => toast('Не удалось скопировать', 'error');
+
+  if (navigator.clipboard && navigator.clipboard.writeText && location.protocol !== 'file:'){
+    navigator.clipboard.writeText(str).then(done).catch(() => fallbackCopy(str, done, fail));
+  } else {
+    fallbackCopy(str, done, fail);
+  }
+}
+function fallbackCopy(str, done, fail){
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = str;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0;';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    ok ? done() : fail();
+  } catch(_){ fail(); }
+}
+
+/* ============================================================
+   DATA-URL ↔ BLOB
+   ============================================================ */
+function dataUrlToBlob(dataUrl){
+  try {
+    const parts = String(dataUrl).split(',');
+    if (parts.length < 2) return null;
+    const header = parts[0];
+    const b64 = parts[1];
+    const mimeMatch = header.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+    const binary = atob(b64);
+    const arr = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+  } catch(e){ return null; }
+}
+
+function downloadApplicantDocument(doc){
+  const blob = dataUrlToBlob(doc.dataUrl);
+  if (!blob){ toast('Не удалось прочитать файл','error'); return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = doc.name || 'document';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 function downloadJSON(obj,filename){
   const blob = new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
@@ -4751,6 +4958,61 @@ function normalizeCourse(c){
   return c;
 }
 
+function normalizeFaq(f){
+  if (!f || typeof f !== 'object') return f;
+  if (!Array.isArray(f.tags)) f.tags = [];
+  if (typeof f.question !== 'string') f.question = '';
+  if (typeof f.answer   !== 'string') f.answer   = '';
+  if (!f.createdAt) f.createdAt = Date.now();
+  if (!f.updatedAt) f.updatedAt = f.createdAt;
+  return f;
+}
+function normalizeNote(n){
+  if (!n || typeof n !== 'object') return n;
+  if (!Array.isArray(n.tags)) n.tags = [];
+  if (typeof n.title !== 'string') n.title = '';
+  if (typeof n.body  !== 'string') n.body  = '';
+  if (!n.color) n.color = 'yellow';
+  if (typeof n.pinned !== 'boolean') n.pinned = false;
+  if (!n.createdAt) n.createdAt = Date.now();
+  if (!n.updatedAt) n.updatedAt = n.createdAt;
+  return n;
+}
+function normalizeWiring(w){
+  if (!w || typeof w !== 'object') return w;
+  if (typeof w.brand   !== 'string') w.brand   = '';
+  if (typeof w.model   !== 'string') w.model   = '';
+  if (typeof w.year    !== 'number' && typeof w.year !== 'string') w.year = '';
+  if (typeof w.coverImage !== 'string') w.coverImage = '';
+  if (!Array.isArray(w.gallery)) w.gallery = [];   // [{ id, image, caption }]
+  w.gallery.forEach(g => { if (!g.id) g.id = uid(); if (typeof g.caption !== 'string') g.caption = ''; });
+  if (typeof w.description !== 'string') w.description = '';
+  if (!w.createdAt) w.createdAt = Date.now();
+  if (!w.updatedAt) w.updatedAt = w.createdAt;
+  return w;
+}
+function normalizeApplicant(a){
+  if (!a || typeof a !== 'object') return a;
+  const str = (k, def='') => { if (typeof a[k] !== 'string') a[k] = def; };
+  str('organizationId');
+  str('lastName'); str('firstName'); str('middleName');
+  str('birthDate');
+  str('gender');    
+  str('citizenship');    
+  str('citizenshipCountry');
+  str('dulType');     
+  str('dulSeries'); str('dulNumber');
+  str('dulIssuedBy'); str('dulIssuedDate'); str('dulCode');
+  str('birthPlace');
+  str('snils'); str('inn');
+  str('address'); str('phone'); str('email');
+  if (!Array.isArray(a.documents)) a.documents = [];   // [{ id, name, mime, size, dataUrl, addedAt }]
+  if (!Array.isArray(a.tags)) a.tags = [];
+  if (!a.createdAt) a.createdAt = Date.now();
+  if (!a.updatedAt) a.updatedAt = a.createdAt;
+  return a;
+}
+
 function normalizeDoc(d){
   if(!d || typeof d !== 'object') return d;
   if(!Array.isArray(d.tags)) d.tags=[];
@@ -4796,15 +5058,20 @@ async function loadMigratedDB(){
     routes: mergeArrays(v1.routes, v2.routes).map(normalizeRoute),
     works:     mergeArrays(v1.works,     v2.works    ).map(x => normalizeRefItem(x, 'work')),
     materials: mergeArrays(v1.materials, v2.materials).map(x => normalizeRefItem(x, 'material')),
-    courses: mergeArrays(v1.courses, v2.courses).map(normalizeCourse)
-  };
+    courses: mergeArrays(v1.courses, v2.courses).map(normalizeCourse),
+    faq:       mergeArrays(v1.faq,     v2.faq      ).map(x => normalizeFaq(x)),
+    notes:     mergeArrays(v1.notes,   v2.notes    ).map(x => normalizeNote(x)),
+    wiring:    mergeArrays(v1.wiring,  v2.wiring   ).map(x => normalizeWiring(x)),
+    applicants:mergeArrays(v1.applicants, v2.applicants).map(x => normalizeApplicant(x))
+    };
 }
 
 
 let db = {
   templates: [], documents: [], tireCalcs: [], kwCalcs: [],
   instructions: [], organizations: [], routes: [],
-  works: [], materials: [],   courses: []
+  works: [], materials: [],   courses: [],
+  faq: [], notes: [], wiring: [], applicants: []
 };
 let draft = defaultTemplate('Новый документ');
 
@@ -4818,6 +5085,11 @@ let toolsTab = 'tire';
 let editingInstruction = null;
 let selectedImg = null;
 let refReadMode = true;
+let refTab = 'instructions';
+let editingFaq = null;
+let editingNote = null;
+let editingWiring = null;
+let editingApplicant = null;
 let editingDocId = null;       
 let learningCourseId = null;   
 let learningStepIdx = 0;        
@@ -4878,7 +5150,11 @@ function saveDB(){
     routes: db.routes || [],
     works: db.works || [],
     materials: db.materials || [],
-    courses: db.courses || []
+    courses: db.courses || [],
+    faq: db.faq || [],
+    notes: db.notes || [],
+    wiring: db.wiring || [],
+    applicants: db.applicants || []
   };
   saveJSON(DB_KEY, payload);
 }
@@ -4887,7 +5163,7 @@ function saveDraft(){
   saveJSON(DRAFT_KEY, c);
 }
 window.addEventListener('beforeunload', () => {
-  try { flushCourseSave(); saveDB(); saveDraft(); } catch(_){}
+  try { flushCourseSave(); flushNoteSave(); saveDB(); saveDraft(); } catch(_){}
 });
 
 function getCurrent() {
@@ -5900,6 +6176,7 @@ function refreshSidebar(){
 
 function renderTabs(){
   flushCourseSave();
+  flushNoteSave();
   const tabs = $('#tabs'); tabs.innerHTML = '';
   const items = [
     ['docs','📄 Документы'],
@@ -5909,6 +6186,7 @@ function renderTabs(){
     ['routes','🗺 Маршруты'],
     ['reports','📊 Отчёты'],
     ['learning','🎓 Обучение'],
+    ['notes','📝 Заметки'],
     ['settings','⚙️ Настройки']
   ].filter(([id]) => cfgSection(id));
   items.forEach(([id,label])=>{
@@ -5920,6 +6198,7 @@ function renderTabs(){
       activeSection = id;
       selection = null; viewingDoc = null; editingInstruction = null;
       editingRoute = null; editingStepId = null; routeRunState = null;
+      editingFaq = null; editingNote = null; editingWiring = null;
       clearImgSelection();
       if (id==='docs'){ docsView='list'; activeTemplateId=null; }
       if (id==='routes'){ routesView='list'; }
@@ -6060,8 +6339,38 @@ function renderToolbar(){
 
   /* ========== ORGS ========== */
   if (activeSection === 'orgs'){
+    /* --- Редактор заявителя открыт --- */
+    if (editingApplicant){
+      const originTab = refsTab;   /* запоминаем, куда возвращаться */
+      tb.appendChild(makeBtn('← К списку','',()=>{
+        editingApplicant = null;
+        render();
+      }));
+      if (!isBuildMode()){
+        tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{
+          saveApplicantNow();
+          toast('Сохранено','success');
+          render();
+        }));
+        tb.appendChild(makeBtn('📑 Теги','',()=>{
+          editTagsFor(editingApplicant, ()=>{ saveApplicantNow(); render(); });
+        }));
+        tb.appendChild(makeBtn('🏢 Сменить организацию','',()=>{
+          changeApplicantOrganization(editingApplicant);
+        }));
+      }
+      tb.appendChild(makeBtn('🖨 Печать','',()=>{ saveApplicantNow(); window.print(); }));
+      const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
+      return;
+    }
+    /* --- Списки --- */
     if (refsTab === 'orgs'){
       tb.appendChild(makeBtn('➕ Новая организация','primary',()=>editOrganization(null)));
+      tb.appendChild(makeBtn('➕ Новый заявитель','',()=>createNewApplicant(null)));
+    } else if (refsTab === 'applicants'){
+      if (!isBuildMode()){
+        tb.appendChild(makeBtn('➕ Новый заявитель','primary',()=>createNewApplicant(null)));
+      }
     } else if (refsTab === 'works'){
       tb.appendChild(makeBtn('➕ Новая работа','primary',()=>editRefItem('work', null)));
     } else if (refsTab === 'materials'){
@@ -6085,6 +6394,7 @@ function renderToolbar(){
 
   /* ========== REFERENCE ========== */
   if (activeSection === 'reference'){
+    /* --- Редактор инструкции --- */
     if (editingInstruction){
       tb.appendChild(makeBtn('← К списку','',()=>{ saveInstructionNow(); editingInstruction=null; render(); }));
       if (refReadMode){
@@ -6095,12 +6405,141 @@ function renderToolbar(){
       }
       tb.appendChild(makeBtn('📑 Теги','',()=>{ editTagsFor(editingInstruction, ()=>{ saveInstructionNow(); render(); }); }));
       tb.appendChild(makeBtn('🖨 Печать','',()=>{ saveInstructionNow(); window.print(); }));
-    } else {
-      tb.appendChild(makeBtn('➕ Новая запись','primary', createNewInstruction));
-      const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
+      return;
     }
+    /* --- Редактор FAQ --- */
+    if (editingFaq){
+      tb.appendChild(makeBtn('← К списку FAQ','',()=>{
+        /* Автосохранение перед выходом */
+        saveFaqNow();
+        editingFaq = null; render();
+      }));
+      tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{ saveFaqNow(); render(); }));
+      tb.appendChild(makeBtn('📑 Теги','',()=>{ editTagsFor(editingFaq, ()=>{ saveFaqNow(); render(); }); }));
+      tb.appendChild(makeBtn('🖨 Печать','',()=>{ saveFaqNow(); window.print(); }));
+      return;
+    }
+    /* --- Редактор карточки подключения --- */
+    if (editingWiring){
+      tb.appendChild(makeBtn('← К списку карт','',()=>{
+        saveWiringNow();
+        editingWiring = null; render();
+      }));
+      tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{ saveWiringNow(); render(); }));
+      tb.appendChild(makeBtn('🖨 Печать','',()=>{ saveWiringNow(); window.print(); }));
+      return;
+    }
+    /* --- Список внутри подвкладок --- */
+    if (isBuildMode()){
+      /* В сборке — только просмотр */
+      const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
+      return;
+    }
+    if (refTab === 'instructions'){
+      tb.appendChild(makeBtn('➕ Новая запись','primary', createNewInstruction));
+    } else if (refTab === 'faq'){
+      tb.appendChild(makeBtn('➕ Новый вопрос','primary', createNewFaq));
+    } else if (refTab === 'wiring'){
+      tb.appendChild(makeBtn('➕ Новая карта подключения','primary', createNewWiring));
+    }
+    const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
     return;
   }
+
+  /* ========== NOTES ========== */
+  if (activeSection === 'notes'){
+    if (editingNote){
+      tb.appendChild(makeBtn('← К списку','',()=>{
+        saveNoteNow();
+        editingNote = null; render();
+      }));
+      if (!isBuildMode()){
+        tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{ saveNoteNow(); render(); }));
+        tb.appendChild(makeBtn('🎨 Цвет','',()=> cycleNoteColor(editingNote)));
+        tb.appendChild(makeBtn('📑 Теги','',()=>{
+          editTagsFor(editingNote, ()=>{ saveNoteNow(); render(); });
+        }));
+        tb.appendChild(makeBtn(
+          editingNote.pinned ? '📌 Открепить' : '📌 Закрепить',
+          '',
+          ()=> toggleNotePin(editingNote)
+        ));
+      }
+      tb.appendChild(makeBtn('🖨 Печать','',()=>{ saveNoteNow(); window.print(); }));
+      return;
+    }
+    if (!isBuildMode()){
+      tb.appendChild(makeBtn('➕ Новая заметка','primary', createNewNote));
+    }
+    const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
+    return;
+  }
+
+  /* ============================================================
+   ЗАМЕТКИ — модель и функции
+   ============================================================ */
+const NOTE_COLORS = [
+  { id: 'yellow', name: 'Жёлтый',    bg: '#fef3c7', border: '#fcd34d' },
+  { id: 'green',  name: 'Зелёный',   bg: '#d1fae5', border: '#6ee7b7' },
+  { id: 'blue',   name: 'Голубой',   bg: '#dbeafe', border: '#93c5fd' },
+  { id: 'pink',   name: 'Розовый',   bg: '#fce7f3', border: '#f9a8d4' },
+  { id: 'purple', name: 'Сиреневый', bg: '#ede9fe', border: '#c4b5fd' },
+  { id: 'gray',   name: 'Серый',     bg: '#f1f5f9', border: '#cbd5e1' }
+];
+
+function noteColorObj(id){
+  return NOTE_COLORS.find(c => c.id === id) || NOTE_COLORS[0];
+}
+
+function createNewNote(){
+  const n = {
+    id: uid(),
+    title: 'Новая заметка',
+    body: '',
+    color: 'yellow',
+    pinned: false,
+    tags: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+  db.notes.push(n); saveDB();
+  editingNote = n;
+  render();
+}
+
+function saveNoteNow(){
+  if (!editingNote) return;
+  const n = db.notes.find(x => x.id === editingNote.id);
+  if (!n) return;
+  const titleInp = document.querySelector('.note-title-input');
+  const bodyInp  = document.querySelector('.note-body-input');
+  if (titleInp) n.title = titleInp.value.trim() || 'Без названия';
+  if (bodyInp)  n.body  = bodyInp.innerHTML;
+  n.updatedAt = Date.now();
+  editingNote = n;
+  saveDB();
+}
+
+function cycleNoteColor(note){
+  if (!note) return;
+  const idx = NOTE_COLORS.findIndex(c => c.id === note.color);
+  const next = NOTE_COLORS[(idx + 1) % NOTE_COLORS.length];
+  note.color = next.id;
+  note.updatedAt = Date.now();
+  saveDB();
+  render();
+  toast('Цвет: ' + next.name, 'info');
+}
+
+function toggleNotePin(note){
+  if (!note) return;
+  note.pinned = !note.pinned;
+  note.updatedAt = Date.now();
+  saveDB();
+  render();
+  toast(note.pinned ? '📌 Закреплено' : 'Откреплено', 'info');
+}
+
 
   /* ========== ROUTES ========== */
   if (activeSection === 'routes'){
@@ -6261,8 +6700,24 @@ function renderMain(){
   if (activeSection === 'tools'){ sidebar.classList.add('hidden'); area.classList.add('tall'); renderTools(area); return; }
   if (activeSection === 'reference'){
     sidebar.classList.add('hidden'); area.classList.add('tall');
-    if (editingInstruction) renderInstructionEditor(area, editingInstruction);
-    else renderReferenceList(area);
+    if (editingInstruction){
+      renderInstructionEditor(area, editingInstruction);
+    } else if (editingFaq){
+      renderFaqEditor(area, editingFaq);
+    } else if (editingWiring){
+      renderWiringEditor(area, editingWiring);
+    } else {
+      renderReferenceSection(area);
+    }
+    return;
+  }
+  if (activeSection === 'notes'){
+    sidebar.classList.add('hidden'); area.classList.add('tall');
+    if (editingNote){
+      renderNoteEditor(area, editingNote);
+    } else {
+      renderNotesList(area);
+    }
     return;
   }
   if (activeSection === 'routes'){
@@ -6624,6 +7079,20 @@ function renderRefsOrgs(area){
           ${metaLines.join(' · ')}
         </div>`;
       const actions = document.createElement('div'); actions.className='item-actions';
+      const appBtn = document.createElement('button');
+      appBtn.className='card-btn';
+      const appCount = (db.applicants||[]).filter(a => a.organizationId === org.id).length;
+      appBtn.textContent = '👤 Заявители' + (appCount ? ' (' + appCount + ')' : '');
+      appBtn.title = 'Показать заявителей этой организации';
+      appBtn.onclick = e => {
+        e.stopPropagation();
+        applicantsFilter.orgId = org.id;
+        applicantsFilter.search = '';
+        refsTab = 'applicants';
+        editingApplicant = null;
+        render();
+      };
+      actions.appendChild(appBtn);
       const edit = document.createElement('button');
       edit.className='card-btn primary'; edit.textContent='✏️ Изменить';
       edit.onclick = e=>{ e.stopPropagation(); editOrganization(org); };
@@ -6672,17 +7141,21 @@ function renderReferences(area){
   const subs = document.createElement('div');
   subs.className = 'subtabs';
   subs.style.marginBottom = '18px';
-  [
-    ['orgs','🏢 Организации'],
-    ['works','🔧 Работы'],
-    ['materials','📦 Материалы'],
-    ['print','🖨 Печать прайса']
-  ].forEach(([id, label]) => {
+  const REFS_TABS = [
+    ['orgs',       '🏢 Организации',   true],
+    ['works',      '🔧 Работы',        true],
+    ['materials',  '📦 Материалы',     true],
+    ['applicants', '👤 Заявители',     cfgFeature('orgs','applicants') !== false],
+    ['print',      '🖨 Печать прайса', true]
+  ];
+  REFS_TABS.forEach(([id, label, enabled]) => {
+    if (!enabled) return;
     const el = document.createElement('div');
     el.className = 'subtab' + (refsTab === id ? ' active' : '');
     el.textContent = label;
     el.onclick = () => {
       if (refsTab === id) return;
+      editingApplicant = null;
       refsTab = id;
       render();
     };
@@ -6696,9 +7169,22 @@ function renderReferences(area){
 
   area.appendChild(wrap);
 
-  if (refsTab === 'orgs')      renderRefsOrgsInto(body);
+  if (refsTab === 'orgs'){
+    if (editingApplicant){
+      renderApplicantEditor(body, editingApplicant);
+    } else {
+      renderRefsOrgsInto(body);
+    }
+  }
   else if (refsTab === 'works')     renderRefsItemsInto(body, 'work');
   else if (refsTab === 'materials') renderRefsItemsInto(body, 'material');
+  else if (refsTab === 'applicants'){
+    if (editingApplicant){
+      renderApplicantEditor(body, editingApplicant);
+    } else {
+      renderApplicantsList(body);
+    }
+  }
   else                              renderRefsPrintInto(body);
 }
 
@@ -7169,14 +7655,19 @@ async function renderStorageChart(host){
     catch(_) { return 0; }
   };
   const sizes = {
-    templates:    jsonLen(db.templates),
-    documents:    jsonLen(db.documents),
-    instructions: jsonLen(db.instructions),
-    organizations:jsonLen(db.organizations),
-    works:        jsonLen(db.works),
-    materials:    jsonLen(db.materials),
-    routes:       jsonLen(db.routes),
-    calcs:        jsonLen((db.tireCalcs||[]).concat(db.kwCalcs||[]))
+    templates:     jsonLen(db.templates),
+    documents:     jsonLen(db.documents),
+    instructions:  jsonLen(db.instructions),
+    faq:           jsonLen(db.faq),
+    wiring:        jsonLen(db.wiring),
+    notes:         jsonLen(db.notes),
+    organizations: jsonLen(db.organizations),
+    applicants:    jsonLen(db.applicants),
+    works:         jsonLen(db.works),
+    materials:     jsonLen(db.materials),
+    routes:        jsonLen(db.routes),
+    courses:       jsonLen(db.courses),
+    calcs:         jsonLen((db.tireCalcs||[]).concat(db.kwCalcs||[]))
   };
   const totalApp = Object.values(sizes).reduce((s,n)=>s+n,0) || 1;
 
@@ -7272,16 +7763,23 @@ async function renderStorageChart(host){
   bdTitle.textContent = 'По разделам приложения';
   bd.appendChild(bdTitle);
 
-  const CATS = [
-    { key:'templates',     ico:'📄', name:'Шаблоны',     color:'#2563eb' },
-    { key:'documents',     ico:'📋', name:'Копии',       color:'#059669' },
-    { key:'instructions',  ico:'📖', name:'Справочник',  color:'#7c3aed' },
-    { key:'organizations', ico:'🏢', name:'Организации', color:'#ea580c' },
-    { key:'works',         ico:'🔧', name:'Работы',      color:'#dc2626' },
-    { key:'materials',     ico:'📦', name:'Материалы',   color:'#db2777' },
-    { key:'routes',        ico:'🗺', name:'Маршруты',    color:'#0891b2' },
-    { key:'calcs',         ico:'🧮', name:'Расчёты W/KW',color:'#64748b' }
+  const ALL_CATS = [
+    { key:'templates',     ico:'📄', name:'Шаблоны',            color:'#2563eb', cfg:null },
+    { key:'documents',     ico:'📋', name:'Копии',              color:'#059669', cfg:null },
+    { key:'instructions',  ico:'📖', name:'Инструкции',         color:'#7c3aed', cfg:'reference' },
+    { key:'faq',           ico:'❓', name:'FAQ',                color:'#0891b2', cfg:'reference' },
+    { key:'wiring',        ico:'🔌', name:'Карты подключений',  color:'#8b5cf6', cfg:'reference' },
+    { key:'notes',         ico:'📝', name:'Заметки',            color:'#db2777', cfg:'notes' },
+    { key:'organizations', ico:'🏢', name:'Организации',        color:'#ea580c', cfg:'orgs' },
+    { key:'applicants',    ico:'👤', name:'Заявители',          color:'#f59e0b', cfg:'orgs' },
+    { key:'works',         ico:'🔧', name:'Работы',             color:'#dc2626', cfg:'orgs' },
+    { key:'materials',     ico:'📦', name:'Материалы',          color:'#db2777', cfg:'orgs' },
+    { key:'routes',        ico:'🗺', name:'Маршруты',           color:'#0891b2', cfg:'routes' },
+    { key:'courses',       ico:'🎓', name:'Курсы обучения',     color:'#8b5cf6', cfg:'learning' },
+    { key:'calcs',         ico:'🧮', name:'Расчёты W/KW',       color:'#64748b', cfg:'tools' }
   ];
+  /* Оставляем только те, что включены в этой сборке */
+  const CATS = ALL_CATS.filter(c => !c.cfg || cfgSection(c.cfg));
 
   CATS.forEach(cat => {
     const size = sizes[cat.key] || 0;
@@ -9397,6 +9895,2079 @@ function saveInstructionDebounced(){
 }
 
 /* ============================================================
+   FAQ — модель и функции
+   ============================================================ */
+function createNewFaq(){
+  const f = {
+    id: uid(),
+    question: 'Новый вопрос',
+    answer: '<p><br></p>',
+    tags: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+  db.faq.push(f); saveDB();
+  editingFaq = f;
+  refReadMode = false;
+  render();
+}
+
+function saveFaqNow(){
+  if (!editingFaq) return;
+  const f = db.faq.find(x => x.id === editingFaq.id);
+  if (!f) return;
+  const qInp = document.querySelector('.faq-question-input');
+  const aInp = document.querySelector('.faq-answer-input');
+  if (qInp) f.question = qInp.value.trim() || 'Без вопроса';
+  if (aInp) f.answer = aInp.value;
+  f.updatedAt = Date.now();
+  editingFaq = f;
+  saveDB();
+}
+
+let faqSaveTimer = null;
+function saveFaqDebounced(){
+  clearTimeout(faqSaveTimer);
+  faqSaveTimer = setTimeout(() => {
+    saveFaqNow();
+    const flag = document.querySelector('.faq-saved-flag');
+    if (flag){
+      flag.textContent = '💾 Сохранено ' + new Date().toLocaleTimeString('ru-RU');
+      flag.classList.remove('dirty');
+    }
+  }, 500);
+}
+
+/* ============================================================
+   ЗАЯВИТЕЛИ — ФУНКЦИИ
+   ============================================================ */
+function createNewApplicant(organizationId){
+  /* Если организаций нет — предложить создать */
+  if (!(db.organizations||[]).length){
+    toast('Сначала создайте хотя бы одну организацию','error');
+    return;
+  }
+  const orgId = organizationId || null;
+  const a = {
+    id: uid(),
+    organizationId: orgId,
+    lastName: '', firstName: '', middleName: '',
+    birthDate: '',
+    gender: '',
+    citizenship: 'гражданин Российской Федерации',
+    citizenshipCountry: 'Российская Федерация (RU)',
+    dulType: 'Паспорт гражданина Российской Федерации',
+    dulSeries: '', dulNumber: '',
+    dulIssuedBy: '', dulIssuedDate: '', dulCode: '',
+    birthPlace: '',
+    snils: '', inn: '',
+    address: '', phone: '', email: '',
+    documents: [],
+    tags: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+  db.applicants.push(a);
+  saveDB();
+  editingApplicant = a;
+  refsTab = 'applicants';
+  render();
+}
+
+function saveApplicantNow(){
+  if (!editingApplicant) return;
+  const a = db.applicants.find(x => x.id === editingApplicant.id);
+  if (!a) return;
+  a.updatedAt = Date.now();
+  editingApplicant = a;
+  saveDB();
+}
+
+function changeApplicantOrganization(a){
+  if (!a) return;
+  if (!(db.organizations||[]).length){
+    toast('Нет организаций','error'); return;
+  }
+  const items = db.organizations.map(o => ({ value: o.id, label: o.name || '(без названия)' }));
+  /* Модальный диалог выбора */
+  const ov = document.createElement('div'); ov.className = 'modal-overlay';
+  const modal = document.createElement('div'); modal.className = 'modal';
+  modal.style.maxWidth = '480px';
+  modal.innerHTML = '<h3>🏢 Выбор организации</h3>' +
+    '<p style="margin:0 0 14px;font-size:13px;color:var(--text-2);">' +
+      'Заявитель будет привязан к выбранной организации. ' +
+      'Реквизиты организации будут подставляться в карточку.' +
+    '</p>';
+  const sel = document.createElement('select');
+  sel.style.cssText = 'width:100%;padding:9px 12px;border:1px solid var(--border-2);border-radius:8px;font:inherit;font-size:13.5px;';
+  const emptyOpt = document.createElement('option'); emptyOpt.value = ''; emptyOpt.textContent = '— выберите —';
+  sel.appendChild(emptyOpt);
+  items.forEach(it => {
+    const o = document.createElement('option'); o.value = it.value; o.textContent = it.label;
+    if (a.organizationId === it.value) o.selected = true;
+    sel.appendChild(o);
+  });
+  modal.appendChild(sel);
+
+  const actions = document.createElement('div'); actions.className = 'modal-actions';
+  const cancel = document.createElement('button'); cancel.textContent = 'Отмена';
+  cancel.onclick = () => ov.remove();
+  const save = document.createElement('button'); save.className = 'primary'; save.textContent = '💾 Применить';
+  save.onclick = () => {
+    a.organizationId = sel.value || null;
+    a.updatedAt = Date.now();
+    saveDB();
+    ov.remove();
+    render();
+    toast('Организация изменена','success');
+  };
+  actions.append(cancel, save);
+  modal.appendChild(actions);
+
+  ov.appendChild(modal);
+  ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+  document.body.appendChild(ov);
+}
+
+/* ============================================================
+   СТРОКА С ПОЛЕМ И КНОПКОЙ КОПИРОВАНИЯ
+   ============================================================ */
+function makeFieldRow(label, value, opts){
+  opts = opts || {};
+  const tr = document.createElement('tr');
+  tr.style.cssText = 'border-bottom:1px solid var(--border);';
+
+  const td1 = document.createElement('td');
+  td1.style.cssText = 'padding:9px 12px;width:220px;color:var(--text-2);font-size:13px;vertical-align:top;';
+  td1.textContent = label;
+  tr.appendChild(td1);
+
+  const td2 = document.createElement('td');
+  td2.style.cssText = 'padding:9px 12px;font-size:13.5px;color:var(--text);word-break:break-word;';
+
+  if (opts.editable && !opts.readMode){
+    const inp = document.createElement('input');
+    inp.type = opts.inputType || 'text';
+    inp.value = value || '';
+    inp.placeholder = opts.placeholder || '';
+    inp.style.cssText =
+      'width:100%;padding:6px 10px;border:1px solid var(--border-2);border-radius:6px;' +
+      'font:inherit;font-size:13px;background:#fff;color:var(--text);';
+    inp.oninput = () => opts.onChange && opts.onChange(inp.value);
+    td2.appendChild(inp);
+  } else {
+    td2.textContent = value || '—';
+    if (!value) td2.style.color = 'var(--text-3)';
+  }
+  tr.appendChild(td2);
+
+  const td3 = document.createElement('td');
+  td3.style.cssText = 'width:44px;text-align:center;padding:4px 6px;vertical-align:middle;';
+  if (value){
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'card-btn';
+    copyBtn.style.cssText = 'padding:4px 8px;font-size:14px;line-height:1;';
+    copyBtn.textContent = '📋';
+    copyBtn.title = 'Скопировать только значение';
+    copyBtn.onclick = () => copyToClipboard(String(value));
+    td3.appendChild(copyBtn);
+  }
+  tr.appendChild(td3);
+
+  return tr;
+}
+
+/* Заголовок блока таблицы */
+function makeBlockHeader(title, color){
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'margin:22px 0 8px;';
+  const h = document.createElement('h4');
+  h.style.cssText =
+    'margin:0;font-size:15px;font-weight:700;color:' + (color || 'var(--text)') + ';' +
+    'padding-bottom:6px;border-bottom:2px solid ' + (color || 'var(--primary)') + ';';
+  h.textContent = title;
+  wrap.appendChild(h);
+  return wrap;
+}
+
+/* ============================================================
+   СПИСОК ЗАЯВИТЕЛЕЙ
+   ============================================================ */
+let applicantsFilter = { search: '', orgId: '' };
+
+function renderApplicantsList(area){
+  area.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.width = '100%';
+
+  const list = db.applicants || [];
+  const head = document.createElement('div'); head.className='list-head';
+  head.innerHTML = '<h2 style="font-size:18px;">👤 Заявители <span class="count-badge">' +
+    list.length + '</span></h2>';
+  wrap.appendChild(head);
+
+  if (!list.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    if (isBuildMode()){
+      e.innerHTML = '<span class="big-icon">👤</span>Заявителей пока нет.';
+    } else if (!(db.organizations||[]).length){
+      e.innerHTML = '<span class="big-icon">🏢</span>' +
+        'Сначала нужно создать хотя бы одну организацию на вкладке «Организации».';
+    } else {
+      e.innerHTML = '<span class="big-icon">👤</span>Пока нет ни одного заявителя.<br>' +
+        'Нажмите «➕ Новый заявитель».';
+    }
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+
+  /* Фильтры */
+  const bar = document.createElement('div'); bar.className = 'filter-bar';
+
+  const searchInp = document.createElement('input');
+  searchInp.type = 'text'; searchInp.className = 'filter-search';
+  searchInp.placeholder = 'Поиск по ФИО, ИНН, СНИЛС, ДУЛ…';
+  searchInp.value = applicantsFilter.search || '';
+  let st = null;
+  searchInp.addEventListener('input', () => {
+    clearTimeout(st);
+    st = setTimeout(() => { applicantsFilter.search = searchInp.value; render(); }, 200);
+  });
+  bar.appendChild(searchInp);
+
+  /* Фильтр по организации */
+  const orgSel = document.createElement('select');
+  orgSel.className = 'filter-sort';
+  orgSel.style.minWidth = '220px';
+  const optAll = document.createElement('option'); optAll.value = ''; optAll.textContent = 'Все организации';
+  orgSel.appendChild(optAll);
+  db.organizations.forEach(o => {
+    const opt = document.createElement('option'); opt.value = o.id; opt.textContent = o.name || '(без названия)';
+    if (applicantsFilter.orgId === o.id) opt.selected = true;
+    orgSel.appendChild(opt);
+  });
+  orgSel.onchange = () => { applicantsFilter.orgId = orgSel.value; render(); };
+  bar.appendChild(orgSel);
+
+  wrap.appendChild(bar);
+
+  /* Фильтрация */
+  let filtered = list.slice();
+  if (applicantsFilter.orgId){
+    filtered = filtered.filter(a => a.organizationId === applicantsFilter.orgId);
+  }
+  const q = (applicantsFilter.search || '').trim().toLowerCase();
+  if (q){
+    filtered = filtered.filter(a => {
+      const fio = [a.lastName, a.firstName, a.middleName].filter(Boolean).join(' ').toLowerCase();
+      const dul = ((a.dulSeries||'') + ' ' + (a.dulNumber||'')).toLowerCase();
+      return fio.includes(q) ||
+        (a.snils||'').toLowerCase().includes(q) ||
+        (a.inn||'').toLowerCase().includes(q) ||
+        (a.phone||'').toLowerCase().includes(q) ||
+        (a.email||'').toLowerCase().includes(q) ||
+        dul.includes(q);
+    });
+  }
+
+  filtered.sort((a,b) => {
+    const fa = [a.lastName, a.firstName, a.middleName].filter(Boolean).join(' ');
+    const fb = [b.lastName, b.firstName, b.middleName].filter(Boolean).join(' ');
+    return fa.localeCompare(fb, 'ru');
+  });
+
+  if (!filtered.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    e.textContent = 'Ничего не найдено по текущему фильтру.';
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+
+  /* Таблица */
+  const tbl = document.createElement('table');
+  tbl.style.cssText = 'width:100%;border-collapse:collapse;font-size:13.5px;';
+
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  trh.style.cssText = 'background:var(--panel-2);border-bottom:2px solid var(--border);';
+  ['ФИО', 'Организация', 'ДУЛ', 'СНИЛС', 'ИНН', '📎', ''].forEach((h, i) => {
+    const th = document.createElement('th');
+    th.style.cssText = 'padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;' +
+      'letter-spacing:.06em;color:var(--text-3);font-weight:700;';
+    if (i === 5) th.style.textAlign = 'center';
+    if (i === 6) th.style.width = '100px';
+    th.textContent = h;
+    trh.appendChild(th);
+  });
+  thead.appendChild(trh);
+  tbl.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  filtered.forEach(a => {
+    const org = db.organizations.find(o => o.id === a.organizationId);
+    const tr = document.createElement('tr');
+    tr.style.cssText = 'border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;';
+    tr.onmouseenter = () => tr.style.background = 'var(--panel-2)';
+    tr.onmouseleave = () => tr.style.background = '';
+
+    const fio = [a.lastName, a.firstName, a.middleName].filter(Boolean).join(' ') || '(без ФИО)';
+    const dul = [a.dulSeries, a.dulNumber].filter(Boolean).join(' ');
+    const docCount = (a.documents||[]).length;
+
+    tr.innerHTML =
+      '<td style="padding:10px 12px;font-weight:600;">' + escapeHtml(fio) + '</td>' +
+      '<td style="padding:10px 12px;color:var(--text-2);">' + (org ? escapeHtml(org.name) : '<i style="color:var(--text-3)">не указана</i>') + '</td>' +
+      '<td style="padding:10px 12px;color:var(--text-2);font-family:ui-monospace,monospace;font-size:12.5px;">' + escapeHtml(dul || '—') + '</td>' +
+      '<td style="padding:10px 12px;color:var(--text-2);font-family:ui-monospace,monospace;font-size:12.5px;">' + escapeHtml(a.snils || '—') + '</td>' +
+      '<td style="padding:10px 12px;color:var(--text-2);font-family:ui-monospace,monospace;font-size:12.5px;">' + escapeHtml(a.inn || '—') + '</td>' +
+      '<td style="padding:10px 12px;text-align:center;">' + (docCount ? '<span title="Документов: ' + docCount + '" style="background:var(--primary-soft);color:var(--primary);padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700;">📎 ' + docCount + '</span>' : '<span style="color:var(--text-3);">—</span>') + '</td>' +
+      '<td style="padding:10px 12px;text-align:right;white-space:nowrap;"></td>';
+
+    const actionsTd = tr.lastElementChild;
+
+    const openBtn = document.createElement('button');
+    openBtn.className = 'card-btn primary';
+    openBtn.style.cssText = 'padding:5px 10px;font-size:12px;';
+    openBtn.textContent = isBuildMode() ? '👁 Просмотр' : '✏️ Открыть';
+    openBtn.onclick = (e) => {
+      e.stopPropagation();
+      editingApplicant = a;
+      render();
+    };
+    actionsTd.appendChild(openBtn);
+
+    if (!isBuildMode()){
+      const delBtn = document.createElement('button');
+      delBtn.className = 'card-btn danger';
+      delBtn.style.cssText = 'padding:5px 8px;font-size:12px;margin-left:4px;';
+      delBtn.textContent = '🗑';
+      delBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (!confirm('Удалить заявителя «' + fio + '»?')) return;
+        db.applicants = db.applicants.filter(x => x.id !== a.id);
+        saveDB();
+        render();
+        toast('Заявитель удалён','info');
+      };
+      actionsTd.appendChild(delBtn);
+    }
+
+    tr.onclick = () => { editingApplicant = a; render(); };
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+
+  wrap.appendChild(tbl);
+  area.appendChild(wrap);
+}
+
+/* ============================================================
+   КАРТОЧКА ЗАЯВИТЕЛЯ — ТРИ БЛОКА
+   ============================================================ */
+function renderApplicantEditor(area, applicant){
+  const readMode = isBuildMode();
+  const org = db.organizations.find(o => o.id === applicant.organizationId);
+
+  area.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.className = 'instr-wrap';
+  wrap.style.maxWidth = '1000px';
+
+  /* ============================================================
+     ШАПКА: ФИО + привязка к организации + сменить
+     ============================================================ */
+  const headerBox = document.createElement('div');
+  headerBox.className = 'conv-card';
+  headerBox.style.marginBottom = '14px';
+
+  const fio = [applicant.lastName, applicant.firstName, applicant.middleName]
+    .filter(Boolean).join(' ') || 'Новый заявитель';
+
+  const headerTop = document.createElement('div');
+  headerTop.style.cssText = 'display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;';
+  headerTop.innerHTML =
+    '<h3 style="margin:0;flex:1;">👤 ' + escapeHtml(fio) + '</h3>';
+
+  if (!readMode){
+    const changeOrgBtn = document.createElement('button');
+    changeOrgBtn.className = 'btn';
+    changeOrgBtn.textContent = '🏢 Сменить организацию';
+    changeOrgBtn.onclick = () => changeApplicantOrganization(applicant);
+    headerTop.appendChild(changeOrgBtn);
+  }
+  headerBox.appendChild(headerTop);
+
+  const orgLine = document.createElement('div');
+  orgLine.style.cssText = 'font-size:13px;color:var(--text-2);';
+  if (org){
+    orgLine.innerHTML = 'Организация: <b style="color:var(--text);">' +
+      escapeHtml(org.name) + '</b>';
+  } else {
+    orgLine.innerHTML = '<span style="color:var(--danger);">⚠ Организация не выбрана. ' +
+      'Реквизиты юр. лица не будут подставляться.</span>';
+  }
+  headerBox.appendChild(orgLine);
+
+  wrap.appendChild(headerBox);
+
+  /* ============================================================
+     БЛОК 1. ДАННЫЕ ЮРИДИЧЕСКОГО ЛИЦА (из организации, readonly)
+     ============================================================ */
+  const orgCard = document.createElement('div');
+  orgCard.className = 'conv-card';
+  orgCard.style.marginBottom = '14px';
+
+  orgCard.appendChild(makeBlockHeader('Данные юридического лица', '#2563eb'));
+
+  if (!org){
+    const msg = document.createElement('div');
+    msg.style.cssText = 'font-size:13px;color:var(--text-3);font-style:italic;padding:12px 0;';
+    msg.textContent = 'Организация не привязана. Нажмите «🏢 Сменить организацию» выше.';
+    orgCard.appendChild(msg);
+  } else {
+    const tbl = document.createElement('table');
+    tbl.style.cssText = 'width:100%;border-collapse:collapse;';
+    const tb = document.createElement('tbody');
+
+    /* Порядок полей — как на референсе */
+    tb.appendChild(makeFieldRow('Страна регистрации', 'Российская Федерация (RU)'));
+    tb.appendChild(makeFieldRow('Полное наименование', org.name || ''));
+    tb.appendChild(makeFieldRow('Сокращённое наименование', org.shortName || ''));
+    tb.appendChild(makeFieldRow('ИНН', org.inn || ''));
+    tb.appendChild(makeFieldRow('ОГРН', org.ogrn || ''));
+    tb.appendChild(makeFieldRow('Адрес', org.address || ''));
+
+    tbl.appendChild(tb);
+    orgCard.appendChild(tbl);
+  }
+  wrap.appendChild(orgCard);
+
+  /* ============================================================
+     БЛОК 2. ДАННЫЕ ПРЕДСТАВИТЕЛЯ
+     ============================================================ */
+  const repCard = document.createElement('div');
+  repCard.className = 'conv-card';
+  repCard.style.marginBottom = '14px';
+  repCard.appendChild(makeBlockHeader('Данные представителя', '#059669'));
+
+  const repTbl = document.createElement('table');
+  repTbl.style.cssText = 'width:100%;border-collapse:collapse;';
+  const repBody = document.createElement('tbody');
+
+  /* Пол — выпадающий список */
+  (() => {
+    const tr = document.createElement('tr');
+    tr.style.cssText = 'border-bottom:1px solid var(--border);';
+
+    const td1 = document.createElement('td');
+    td1.style.cssText = 'padding:9px 12px;width:220px;color:var(--text-2);font-size:13px;';
+    td1.textContent = 'Пол';
+    tr.appendChild(td1);
+
+    const td2 = document.createElement('td');
+    td2.style.cssText = 'padding:9px 12px;font-size:13.5px;';
+
+    if (readMode){
+      td2.textContent = applicant.gender || '—';
+      if (!applicant.gender) td2.style.color = 'var(--text-3)';
+    } else {
+      const sel = document.createElement('select');
+      sel.style.cssText =
+        'padding:6px 10px;border:1px solid var(--border-2);border-radius:6px;' +
+        'font:inherit;font-size:13px;background:#fff;color:var(--text);min-width:180px;';
+      ['', 'Мужской', 'Женский'].forEach(v => {
+        const o = document.createElement('option'); o.value = v; o.textContent = v || '— выберите —';
+        if (applicant.gender === v) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.onchange = () => {
+        applicant.gender = sel.value;
+        applicant.updatedAt = Date.now();
+        saveDB();
+      };
+      td2.appendChild(sel);
+    }
+    tr.appendChild(td2);
+
+    const td3 = document.createElement('td');
+    td3.style.cssText = 'width:44px;text-align:center;padding:4px 6px;';
+    if (applicant.gender){
+      const b = document.createElement('button');
+      b.className = 'card-btn';
+      b.style.cssText = 'padding:4px 8px;font-size:14px;';
+      b.textContent = '📋'; b.title = 'Скопировать значение';
+      b.onclick = () => copyToClipboard(applicant.gender);
+      td3.appendChild(b);
+    }
+    tr.appendChild(td3);
+
+    repBody.appendChild(tr);
+  })();
+
+  repBody.appendChild(makeFieldRow('Фамилия', applicant.lastName, {
+    editable: true, readMode,
+    onChange: v => { applicant.lastName = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Имя', applicant.firstName, {
+    editable: true, readMode,
+    onChange: v => { applicant.firstName = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Отчество', applicant.middleName, {
+    editable: true, readMode,
+    onChange: v => { applicant.middleName = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Дата рождения', applicant.birthDate, {
+    editable: true, readMode,
+    placeholder: 'ДД.ММ.ГГГГ',
+    onChange: v => { applicant.birthDate = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('СНИЛС', applicant.snils, {
+    editable: true, readMode,
+    placeholder: '000-000-000 00',
+    onChange: v => { applicant.snils = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('ИНН', applicant.inn, {
+    editable: true, readMode,
+    onChange: v => { applicant.inn = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Контактный телефон', applicant.phone, {
+    editable: true, readMode,
+    placeholder: '+7 (___) ___-__-__',
+    onChange: v => { applicant.phone = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Адрес электронной почты', applicant.email, {
+    editable: true, readMode,
+    onChange: v => { applicant.email = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Адрес', applicant.address, {
+    editable: true, readMode,
+    onChange: v => { applicant.address = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+
+  repTbl.appendChild(repBody);
+  repCard.appendChild(repTbl);
+  wrap.appendChild(repCard);
+
+  /* ============================================================
+     БЛОК 3. ДАННЫЕ ДУЛ ПРЕДСТАВИТЕЛЯ
+     ============================================================ */
+  const dulCard = document.createElement('div');
+  dulCard.className = 'conv-card';
+  dulCard.style.marginBottom = '14px';
+  dulCard.appendChild(makeBlockHeader('Данные ДУЛ представителя', '#7c3aed'));
+
+  const dulTbl = document.createElement('table');
+  dulTbl.style.cssText = 'width:100%;border-collapse:collapse;';
+  const dulBody = document.createElement('tbody');
+
+  dulBody.appendChild(makeFieldRow('Наличие гражданства', applicant.citizenship, {
+    editable: true, readMode,
+    onChange: v => { applicant.citizenship = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Гражданство', applicant.citizenshipCountry, {
+    editable: true, readMode,
+    onChange: v => { applicant.citizenshipCountry = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Вид документа', applicant.dulType, {
+    editable: true, readMode,
+    onChange: v => { applicant.dulType = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Серия', applicant.dulSeries, {
+    editable: true, readMode,
+    onChange: v => { applicant.dulSeries = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Номер', applicant.dulNumber, {
+    editable: true, readMode,
+    onChange: v => { applicant.dulNumber = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Кем выдан', applicant.dulIssuedBy, {
+    editable: true, readMode,
+    onChange: v => { applicant.dulIssuedBy = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Дата выдачи', applicant.dulIssuedDate, {
+    editable: true, readMode,
+    placeholder: 'ДД.ММ.ГГГГ',
+    onChange: v => { applicant.dulIssuedDate = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Код подразделения', applicant.dulCode, {
+    editable: true, readMode,
+    placeholder: '000-000',
+    onChange: v => { applicant.dulCode = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  dulBody.appendChild(makeFieldRow('Место рождения', applicant.birthPlace, {
+    editable: true, readMode,
+    onChange: v => { applicant.birthPlace = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+
+  dulTbl.appendChild(dulBody);
+  dulCard.appendChild(dulTbl);
+  wrap.appendChild(dulCard);
+
+  /* ============================================================
+     БЛОК 4. ДОКУМЕНТЫ
+     ============================================================ */
+  const docsCard = document.createElement('div');
+  docsCard.className = 'conv-card';
+  docsCard.style.marginBottom = '14px';
+  docsCard.appendChild(makeBlockHeader('Документы (' + (applicant.documents||[]).length + ')', '#ea580c'));
+
+  if (!(applicant.documents||[]).length){
+    const empty = document.createElement('div');
+    empty.style.cssText = 'font-size:13px;color:var(--text-3);font-style:italic;padding:8px 0;';
+    empty.textContent = 'Документы не прикреплены.';
+    docsCard.appendChild(empty);
+  } else {
+    const list = document.createElement('div');
+    list.style.cssText = 'display:flex;flex-direction:column;gap:6px;';
+
+    applicant.documents.forEach((doc, idx) => {
+      const row = document.createElement('div');
+      row.style.cssText =
+        'display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--panel-2);' +
+        'border-radius:8px;font-size:13px;';
+
+      const ico = document.createElement('span');
+      ico.style.fontSize = '20px';
+      ico.textContent = /\.(pdf)$/i.test(doc.name) ? '📄' :
+                        /\.(jpe?g|png|gif|webp)$/i.test(doc.name) ? '🖼' : '📎';
+      row.appendChild(ico);
+
+      const info = document.createElement('div');
+      info.style.cssText = 'flex:1;min-width:0;';
+      info.innerHTML =
+        '<div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' +
+          escapeHtml(doc.name) + '</div>' +
+        '<div style="font-size:11px;color:var(--text-3);">' +
+          (doc.size ? Math.round(doc.size/1024) + ' КБ · ' : '') +
+          fmtDate(doc.addedAt || Date.now()) + '</div>';
+      row.appendChild(info);
+
+      const dlBtn = document.createElement('button');
+      dlBtn.className = 'card-btn primary';
+      dlBtn.style.cssText = 'padding:5px 10px;font-size:12px;';
+      dlBtn.textContent = '⬇ Скачать';
+      dlBtn.onclick = () => downloadApplicantDocument(doc);
+      row.appendChild(dlBtn);
+
+      if (!readMode){
+        const delBtn = document.createElement('button');
+        delBtn.className = 'card-btn danger';
+        delBtn.style.cssText = 'padding:5px 8px;font-size:12px;';
+        delBtn.textContent = '🗑';
+        delBtn.onclick = () => {
+          if (!confirm('Удалить документ «' + doc.name + '»?')) return;
+          applicant.documents.splice(idx, 1);
+          applicant.updatedAt = Date.now();
+          saveDB();
+          render();
+        };
+        row.appendChild(delBtn);
+      }
+      list.appendChild(row);
+    });
+    docsCard.appendChild(list);
+  }
+
+  if (!readMode){
+    const uploadBtn = document.createElement('button');
+    uploadBtn.className = 'btn primary';
+    uploadBtn.style.marginTop = '12px';
+    uploadBtn.textContent = '📎 Добавить документ (до 2 МБ)';
+    uploadBtn.onclick = () => {
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = '.pdf,.jpg,.jpeg,.png,.webp,.doc,.docx';
+      inp.multiple = true;
+      inp.onchange = () => {
+        const files = [...inp.files];
+        if (!files.length) return;
+        let added = 0;
+        let errors = [];
+        files.forEach(f => {
+          if (f.size > 2 * 1024 * 1024){
+            errors.push(f.name + ' (' + Math.round(f.size/1024) + ' КБ — больше 2 МБ)');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = () => {
+            applicant.documents.push({
+              id: uid(),
+              name: f.name,
+              mime: f.type || 'application/octet-stream',
+              size: f.size,
+              dataUrl: reader.result,
+              addedAt: Date.now()
+            });
+            added++;
+            if (added + errors.length === files.length){
+              applicant.updatedAt = Date.now();
+              saveDB();
+              render();
+              if (added) toast('Загружено: ' + added,'success');
+              if (errors.length) toast('Не загружено: ' + errors.length + ' (см. консоль)','error');
+              if (errors.length) console.warn('Превышен лимит 2 МБ:', errors);
+            }
+          };
+          reader.readAsDataURL(f);
+        });
+      };
+      inp.click();
+    };
+    docsCard.appendChild(uploadBtn);
+
+    const hint = document.createElement('div');
+    hint.className = 'hint';
+    hint.style.marginTop = '6px';
+    hint.textContent = 'Поддерживаются PDF, JPG, PNG, WEBP, DOC, DOCX. Лимит одного файла — 2 МБ.';
+    docsCard.appendChild(hint);
+  }
+  wrap.appendChild(docsCard);
+
+  /* ============================================================
+     БЛОК 5. ТЕГИ (если есть)
+     ============================================================ */
+  if ((applicant.tags||[]).length){
+    const tagsCard = document.createElement('div');
+    tagsCard.className = 'conv-card';
+    tagsCard.appendChild(makeBlockHeader('Теги', '#0891b2'));
+    const chips = renderTagChips(applicant.tags);
+    if (chips) tagsCard.appendChild(chips);
+    wrap.appendChild(tagsCard);
+  }
+
+  /* ============================================================
+     МЕТА + УДАЛЕНИЕ
+     ============================================================ */
+  const meta = document.createElement('div');
+  meta.style.cssText = 'font-size:12px;color:var(--text-3);text-align:right;margin-top:14px;';
+  meta.textContent = 'Создано: ' + fmtDate(applicant.createdAt) +
+    ' · Обновлено: ' + fmtDate(applicant.updatedAt);
+  wrap.appendChild(meta);
+
+  if (!readMode){
+    const delWrap = document.createElement('div');
+    delWrap.style.cssText = 'margin-top:16px;padding-top:14px;border-top:1px dashed var(--border);text-align:right;';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn danger';
+    delBtn.textContent = '🗑 Удалить заявителя';
+    delBtn.onclick = () => {
+      if (!confirm('Удалить заявителя «' + fio + '»?')) return;
+      db.applicants = db.applicants.filter(x => x.id !== applicant.id);
+      saveDB();
+      editingApplicant = null;
+      render();
+      toast('Заявитель удалён','info');
+    };
+    delWrap.appendChild(delBtn);
+    wrap.appendChild(delWrap);
+  }
+
+  area.appendChild(wrap);
+}
+/* ============================================================
+   ЗАМЕТКИ — модель и функции
+   ============================================================ */
+const NOTE_COLORS = [
+  { id: 'yellow', name: 'Жёлтый',    bg: '#fef3c7', border: '#fcd34d' },
+  { id: 'green',  name: 'Зелёный',   bg: '#d1fae5', border: '#6ee7b7' },
+  { id: 'blue',   name: 'Голубой',   bg: '#dbeafe', border: '#93c5fd' },
+  { id: 'pink',   name: 'Розовый',   bg: '#fce7f3', border: '#f9a8d4' },
+  { id: 'purple', name: 'Сиреневый', bg: '#ede9fe', border: '#c4b5fd' },
+  { id: 'gray',   name: 'Серый',     bg: '#f1f5f9', border: '#cbd5e1' }
+];
+
+function noteColorObj(id){
+  return NOTE_COLORS.find(c => c.id === id) || NOTE_COLORS[0];
+}
+
+function createNewNote(){
+  const n = {
+    id: uid(),
+    title: 'Новая заметка',
+    body: '',
+    color: 'yellow',
+    pinned: false,
+    tags: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+  db.notes.push(n); saveDB();
+  editingNote = n;
+  render();
+}
+
+function saveNoteNow(){
+  if (!editingNote) return;
+  const n = db.notes.find(x => x.id === editingNote.id);
+  if (!n) return;
+  const titleInp = document.querySelector('.note-title-input');
+  const bodyInp  = document.querySelector('.note-body-input');
+  if (titleInp) n.title = titleInp.value.trim() || 'Без названия';
+  if (bodyInp)  n.body  = bodyInp.innerHTML;
+  n.updatedAt = Date.now();
+  editingNote = n;
+  saveDB();
+}
+
+function saveNoteDebounced(){
+  clearTimeout(_noteSaveTimer);
+  _noteSaveTimer = setTimeout(() => {
+    saveNoteNow();
+    const flag = document.querySelector('.note-saved-flag');
+    if (flag){
+      flag.textContent = '💾 Сохранено ' + new Date().toLocaleTimeString('ru-RU');
+      flag.classList.remove('dirty');
+    }
+    _noteSaveTimer = null;
+  }, 500);
+}
+
+function cycleNoteColor(note){
+  if (!note) return;
+  const idx = NOTE_COLORS.findIndex(c => c.id === note.color);
+  const next = NOTE_COLORS[(idx + 1) % NOTE_COLORS.length];
+  note.color = next.id;
+  note.updatedAt = Date.now();
+  saveDB();
+  render();
+  toast('Цвет: ' + next.name, 'info');
+}
+
+function toggleNotePin(note){
+  if (!note) return;
+  note.pinned = !note.pinned;
+  note.updatedAt = Date.now();
+  saveDB();
+  render();
+  toast(note.pinned ? '📌 Закреплено' : 'Откреплено', 'info');
+}
+
+/* ============================================================
+   Карты подключений — модель и функции
+   ============================================================ */
+function createNewWiring(){
+  const w = {
+    id: uid(),
+    brand: '', model: '', year: '',
+    coverImage: '',
+    gallery: [],           // [{ id, image, caption }]
+    description: '',
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+  db.wiring.push(w); saveDB();
+  editingWiring = w;
+  refTab = 'wiring';
+  render();
+}
+
+function saveWiringNow(){
+  if (!editingWiring) return;
+  const w = db.wiring.find(x => x.id === editingWiring.id);
+  if (!w) return;
+  const bInp = document.querySelector('#wiring-brand');
+  const mInp = document.querySelector('#wiring-model');
+  const yInp = document.querySelector('#wiring-year');
+  const dInp = document.querySelector('#wiring-description');
+  if (bInp) w.brand = bInp.value.trim();
+  if (mInp) w.model = mInp.value.trim();
+  if (yInp) w.year  = yInp.value.trim();
+  if (dInp) w.description = dInp.value;
+  w.updatedAt = Date.now();
+  editingWiring = w;
+  saveDB();
+}
+
+/* ============================================================
+   ОБЁРТКА РАЗДЕЛА «СПРАВОЧНИК» — ПОДВКЛАДКИ
+   ============================================================ */
+function renderReferenceSection(area){
+  area.innerHTML = '';
+  const wrap = document.createElement('div'); wrap.className='instr-wrap';
+
+  /* Заголовок */
+  const head = document.createElement('div'); head.className='list-head';
+  head.innerHTML = '<h2>📖 Справочник</h2>';
+  wrap.appendChild(head);
+
+  /* Подвкладки — учитывают флаги сборки */
+  const subs = document.createElement('div'); subs.className='subtabs';
+  const TABS = [
+    ['instructions', '📄 Инструкции',  true],
+    ['faq',          '❓ FAQ',         cfgFeature('reference','faq')    !== false],
+    ['wiring',       '🔌 Карты подключений', cfgFeature('reference','wiring') !== false]
+  ];
+  TABS.forEach(([id, label, enabled]) => {
+    if (!enabled) return;
+    const el = document.createElement('div');
+    el.className = 'subtab' + (refTab === id ? ' active' : '');
+    el.textContent = label;
+    el.onclick = () => {
+      if (refTab === id) return;
+      refTab = id;
+      render();
+    };
+    subs.appendChild(el);
+  });
+  wrap.appendChild(subs);
+
+  /* Тело */
+  const body = document.createElement('div');
+  wrap.appendChild(body);
+  area.appendChild(wrap);
+
+  if (refTab === 'faq')            renderFaqList(body);
+  else if (refTab === 'wiring')    renderWiringList(body);
+  else                             renderReferenceListInto(body);
+}
+
+/* Обёртка, чтобы renderReferenceList рисовала внутрь body, а не в area */
+function renderReferenceListInto(body){
+  const prev = body.innerHTML;
+  /* renderReferenceList использует area.innerHTML = '' — передадим body как area */
+  renderReferenceList(body);
+}
+
+/* ============================================================
+   FAQ — СПИСОК (аккордеон)
+   ============================================================ */
+let faqFilter = { search: '', sort: 'date-desc', tags: [] };
+let faqOpenSet = new Set();   // id раскрытых вопросов
+
+function renderFaqList(area){
+  area.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.width = '100%';
+
+  const list = db.faq || [];
+  const head = document.createElement('div'); head.className='list-head';
+  head.innerHTML = '<h2 style="font-size:18px;">❓ FAQ <span class="count-badge">' + list.length + '</span></h2>';
+  wrap.appendChild(head);
+
+  if (list.length){
+    const allTags = collectTags(list);
+    wrap.appendChild(renderFilterBar({
+      allTags, activeTags: faqFilter.tags,
+      sortValue: faqFilter.sort, search: faqFilter.search,
+      placeholder: 'Поиск по вопросу и ответу…',
+      onSearch: v => { faqFilter.search = v; render(); },
+      onSort:   v => { faqFilter.sort   = v; render(); },
+      onToggleTag: t => {
+        if (t === null) faqFilter.tags = [];
+        else if (faqFilter.tags.includes(t)) faqFilter.tags = faqFilter.tags.filter(x => x !== t);
+        else faqFilter.tags = [...faqFilter.tags, t];
+        render();
+      }
+    }));
+  }
+
+  let filtered = list.slice();
+  const q = (faqFilter.search || '').trim().toLowerCase();
+  if (q) filtered = filtered.filter(f =>
+    (f.question || '').toLowerCase().includes(q) ||
+    stripHtml(f.answer || '').toLowerCase().includes(q)
+  );
+  if (faqFilter.tags && faqFilter.tags.length)
+    filtered = filtered.filter(f => faqFilter.tags.every(t => (f.tags||[]).includes(t)));
+
+  const s = faqFilter.sort;
+  filtered.sort((a,b) => {
+    if (s === 'date-desc') return (b.updatedAt||b.createdAt||0) - (a.updatedAt||a.createdAt||0);
+    if (s === 'date-asc')  return (a.updatedAt||a.createdAt||0) - (b.updatedAt||b.createdAt||0);
+    if (s === 'name-asc')  return (a.question||'').localeCompare(b.question||'','ru');
+    if (s === 'name-desc') return (b.question||'').localeCompare(a.question||'','ru');
+    return 0;
+  });
+
+  if (!list.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    if (isBuildMode()){
+      e.innerHTML = '<span class="big-icon">❓</span>FAQ пока не заполнен.';
+    } else {
+      e.innerHTML = '<span class="big-icon">❓</span>Пока нет ни одного вопроса.<br>Нажмите «➕ Новый вопрос».';
+    }
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+  if (!filtered.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    e.textContent = 'Ничего не найдено по текущему фильтру.';
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+
+  const acc = document.createElement('div');
+  acc.className = 'faq-accordion';
+
+  filtered.forEach(f => {
+    const isOpen = faqOpenSet.has(f.id);
+    const item = document.createElement('div');
+    item.className = 'faq-item' + (isOpen ? ' open' : '');
+
+    /* ============ Заголовок вопроса ============ */
+    const qRow = document.createElement('div');
+    qRow.className = 'faq-q';
+
+    const mark = document.createElement('div');
+    mark.className = 'faq-mark';
+    mark.textContent = '?';
+    qRow.appendChild(mark);
+
+    const qText = document.createElement('div');
+    qText.className = 'faq-question';
+    qText.textContent = f.question || '(без вопроса)';
+    qRow.appendChild(qText);
+
+    const arrow = document.createElement('span');
+    arrow.className = 'faq-arrow';
+    arrow.textContent = '▼';
+    qRow.appendChild(arrow);
+
+    qRow.onclick = () => {
+      if (isOpen) faqOpenSet.delete(f.id);
+      else        faqOpenSet.add(f.id);
+      render();
+    };
+
+    item.appendChild(qRow);
+
+    /* ============ Раскрытое тело ответа ============ */
+    const aWrap = document.createElement('div');
+    aWrap.className = 'faq-a';
+
+    const aInner = document.createElement('div');
+    aInner.className = 'faq-a-inner';
+
+    /* Ответ (или заглушка) */
+    const answerBody = document.createElement('div');
+    answerBody.innerHTML = f.answer || '<em style="color:var(--text-3)">(нет ответа)</em>';
+    aInner.appendChild(answerBody);
+
+    /* Теги + кнопки в админке */
+    const footer = document.createElement('div');
+    footer.className = 'faq-a-actions';
+
+    const tagsBox = document.createElement('div');
+    tagsBox.className = 'faq-a-tags';
+    if (f.tags && f.tags.length){
+      f.tags.forEach((t, i) => {
+        const chip = document.createElement('span');
+        const palette = ['', 'b', 'g', 'y'];
+        chip.className = 'card-tag ' + (palette[i % palette.length] || '');
+        chip.textContent = t;
+        tagsBox.appendChild(chip);
+      });
+    }
+    footer.appendChild(tagsBox);
+
+    if (!isBuildMode()){
+      const editBtn = document.createElement('button');
+      editBtn.className = 'card-btn primary';
+      editBtn.textContent = '✏️ Редактировать';
+      editBtn.onclick = (e) => {
+        e.stopPropagation();
+        editingFaq = f; refReadMode = false; render();
+      };
+      footer.appendChild(editBtn);
+
+      const tagsBtn = document.createElement('button');
+      tagsBtn.className = 'card-btn';
+      tagsBtn.textContent = '📑 Теги';
+      tagsBtn.onclick = (e) => {
+        e.stopPropagation();
+        editTagsFor(f, ()=>{ saveDB(); render(); });
+      };
+      footer.appendChild(tagsBtn);
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'card-btn danger';
+      delBtn.textContent = '🗑';
+      delBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (!confirm('Удалить вопрос «' + (f.question || '') + '»?')) return;
+        db.faq = db.faq.filter(x => x.id !== f.id);
+        faqOpenSet.delete(f.id);
+        saveDB(); render();
+      };
+      footer.appendChild(delBtn);
+    }
+
+    aInner.appendChild(footer);
+    aWrap.appendChild(aInner);
+    item.appendChild(aWrap);
+
+    acc.appendChild(item);
+  });
+
+  wrap.appendChild(acc);
+  area.appendChild(wrap);
+}
+
+/* ============================================================
+   FAQ — РЕДАКТОР / ПРОСМОТР
+   ============================================================ */
+function renderFaqEditor(area, faq){
+  const readMode = isBuildMode() || refReadMode;
+  const wrap = document.createElement('div'); wrap.className='instr-wrap';
+  const ed = document.createElement('div'); ed.className='instr-editor' + (readMode ? ' read-mode' : '');
+
+  /* Заголовок — вопрос */
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.className = 'instr-title-input faq-question-input';
+  titleInput.placeholder = 'Вопрос';
+  titleInput.value = faq.question || '';
+  if (readMode){ titleInput.readOnly = true; titleInput.tabIndex = -1; }
+  else {
+    titleInput.addEventListener('input', () => {
+      faq.question = titleInput.value;
+      faq.updatedAt = Date.now();
+      saveFaqDebounced();
+      markFaqDirty();
+    });
+  }
+  ed.appendChild(titleInput);
+
+  /* Теги */
+  const tagsLine = document.createElement('div');
+  tagsLine.style.cssText = 'padding:4px 24px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;';
+  const renderTagsLine = () => {
+    tagsLine.innerHTML = '';
+    const chips = renderTagChips(faq.tags); if (chips) tagsLine.appendChild(chips);
+    if (!readMode){
+      const editBtn = document.createElement('button');
+      editBtn.className='card-btn'; editBtn.textContent='📑 Изменить теги';
+      editBtn.style.fontSize = '11.5px';
+      editBtn.onclick = () => editTagsFor(faq, ()=>{ saveFaqNow(); renderTagsLine(); markFaqDirty(); });
+      tagsLine.appendChild(editBtn);
+    }
+  };
+  renderTagsLine();
+  ed.appendChild(tagsLine);
+
+  /* Ответ — простая textarea (не rich editor, FAQ обычно простые) */
+  const answerWrap = document.createElement('div');
+  answerWrap.style.cssText = 'padding:0 24px 20px;';
+
+  if (readMode){
+    const answerView = document.createElement('div');
+    answerView.style.cssText = 'font-size:14.5px;line-height:1.7;color:var(--text);';
+    answerView.innerHTML = faq.answer || '<em style="color:var(--text-3)">(нет ответа)</em>';
+    answerWrap.appendChild(answerView);
+  } else {
+    const answerArea = document.createElement('textarea');
+    answerArea.className = 'faq-answer-input';
+    answerArea.placeholder = 'Ответ (поддерживается простой HTML: <b>, <i>, <a>, <ul>, <br>)';
+    answerArea.value = faq.answer || '';
+    answerArea.rows = 12;
+    answerArea.style.cssText = 'width:100%;padding:12px 14px;border:1px solid var(--border-2);' +
+      'border-radius:8px;font:inherit;font-size:14px;line-height:1.6;resize:vertical;' +
+      'background:#fff;color:var(--text);font-family:inherit;';
+    answerArea.addEventListener('input', () => {
+      faq.answer = answerArea.value;
+      faq.updatedAt = Date.now();
+      saveFaqDebounced();
+      markFaqDirty();
+    });
+    answerWrap.appendChild(answerArea);
+  }
+  ed.appendChild(answerWrap);
+
+  /* Мета */
+  const meta = document.createElement('div'); meta.className='instr-meta';
+  if (readMode){
+    meta.innerHTML = '<span style="color:var(--primary);font-weight:600;">👁 Режим просмотра</span>' +
+      '<span>Обновлено: ' + fmtDate(faq.updatedAt) + '</span>';
+  } else {
+    meta.innerHTML = '<span class="saved-flag faq-saved-flag">💾 Сохранено</span>' +
+      '<span>Обновлено: ' + fmtDate(faq.updatedAt) + '</span>';
+  }
+  ed.appendChild(meta);
+
+  wrap.appendChild(ed); area.appendChild(wrap);
+
+  function markFaqDirty(){
+    const flag = meta.querySelector('.faq-saved-flag');
+    if (!flag) return;
+    flag.textContent = '✏️ Есть несохранённые изменения';
+    flag.classList.add('dirty');
+  }
+}
+
+/* ============================================================
+   ЗАМЕТКИ — СПИСОК (masonry)
+   ============================================================ */
+let notesFilter = { search: '', tags: [] };
+
+function renderNotesList(area){
+  area.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.width = '100%';
+
+  const list = db.notes || [];
+  const head = document.createElement('div'); head.className='list-head';
+  head.innerHTML = '<h2>📝 Заметки <span class="count-badge">' + list.length + '</span></h2>';
+  wrap.appendChild(head);
+
+  if (list.length){
+    const allTags = collectTags(list);
+    wrap.appendChild(renderFilterBar({
+      allTags, activeTags: notesFilter.tags,
+      sortValue: 'date-desc', search: notesFilter.search,
+      placeholder: 'Поиск по заголовку и тексту…',
+      showSort: false,
+      onSearch: v => { notesFilter.search = v; render(); },
+      onSort:   () => {},
+      onToggleTag: t => {
+        if (t === null) notesFilter.tags = [];
+        else if (notesFilter.tags.includes(t)) notesFilter.tags = notesFilter.tags.filter(x => x !== t);
+        else notesFilter.tags = [...notesFilter.tags, t];
+        render();
+      }
+    }));
+  }
+
+  let filtered = list.slice();
+  const q = (notesFilter.search || '').trim().toLowerCase();
+  if (q) filtered = filtered.filter(n =>
+    (n.title || '').toLowerCase().includes(q) ||
+    stripHtml(n.body || '').toLowerCase().includes(q)
+  );
+  if (notesFilter.tags && notesFilter.tags.length)
+    filtered = filtered.filter(n => notesFilter.tags.every(t => (n.tags||[]).includes(t)));
+
+  /* Закреплённые — сверху */
+  filtered.sort((a,b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return (b.updatedAt||b.createdAt||0) - (a.updatedAt||a.createdAt||0);
+  });
+
+  if (!list.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    if (isBuildMode()){
+      e.innerHTML = '<span class="big-icon">📝</span>Заметок пока нет.';
+    } else {
+      e.innerHTML = '<span class="big-icon">📝</span>Пока нет ни одной заметки.<br>Нажмите «➕ Новая заметка».';
+    }
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+  if (!filtered.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    e.textContent = 'Ничего не найдено по текущему фильтру.';
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+
+  /* Masonry через CSS columns */
+  const grid = document.createElement('div');
+  grid.style.cssText = 'column-count:auto;column-width:280px;column-gap:14px;';
+
+  filtered.forEach(n => {
+    const col = noteColorObj(n.color);
+    const card = document.createElement('div');
+    card.style.cssText = 'break-inside:avoid;display:inline-block;width:100%;margin-bottom:14px;' +
+      'background:' + col.bg + ';border:1px solid ' + col.border + ';border-radius:10px;' +
+      'padding:14px 16px;cursor:pointer;transition:transform .15s, box-shadow .15s;position:relative;';
+    card.onmouseenter = () => { card.style.transform = 'translateY(-2px)'; card.style.boxShadow = 'var(--shadow-md)'; };
+    card.onmouseleave = () => { card.style.transform = ''; card.style.boxShadow = ''; };
+
+    const preview = stripHtml(n.body || '').slice(0, 260);
+
+    const pinIcon = n.pinned
+      ? '<span style="position:absolute;top:8px;right:10px;font-size:14px;" title="Закреплено">📌</span>'
+      : '';
+
+    card.innerHTML = pinIcon +
+      '<div style="font-weight:700;font-size:14.5px;color:#0f172a;margin-bottom:6px;padding-right:20px;word-break:break-word;">' +
+        escapeHtml(n.title || '(без названия)') +
+      '</div>' +
+      (preview
+        ? '<div style="font-size:13px;line-height:1.55;color:#334155;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:hidden;">' +
+            escapeHtml(preview) + (preview.length >= 260 ? '…' : '') +
+          '</div>'
+        : '<div style="font-size:12.5px;color:#94a3b8;font-style:italic;">Пустая заметка</div>') +
+      '<div style="margin-top:10px;font-size:11px;color:#64748b;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">' +
+        '<span>' + fmtDate(n.updatedAt) + '</span>' +
+        (n.tags && n.tags.length
+          ? '<span style="display:flex;gap:4px;flex-wrap:wrap;">' +
+              n.tags.slice(0,3).map(t =>
+                '<span style="background:rgba(0,0,0,.08);padding:1px 7px;border-radius:8px;font-weight:600;">' +
+                escapeHtml(t) + '</span>').join('') +
+            '</span>'
+          : '') +
+      '</div>';
+
+    card.onclick = () => {
+      editingNote = n;
+      render();
+    };
+    grid.appendChild(card);
+  });
+
+  wrap.appendChild(grid);
+  area.appendChild(wrap);
+}
+
+/* ============================================================
+   ЗАМЕТКИ — РЕДАКТОР / ПРОСМОТР
+   ============================================================ */
+function renderNoteEditor(area, note){
+  const readMode = isBuildMode();
+  const col = noteColorObj(note.color);
+
+  area.innerHTML = '';
+  const wrap = document.createElement('div'); wrap.className='instr-wrap';
+  wrap.style.maxWidth = '820px';
+
+  const ed = document.createElement('div');
+  ed.className = 'instr-editor';
+  ed.style.background = col.bg;
+  ed.style.border = '1px solid ' + col.border;
+
+  /* Заголовок */
+  const titleInput = document.createElement('input');
+  titleInput.type = 'text';
+  titleInput.className = 'instr-title-input note-title-input';
+  titleInput.placeholder = 'Заголовок заметки';
+  titleInput.value = note.title || '';
+  titleInput.style.background = 'transparent';
+  if (readMode){
+    titleInput.readOnly = true;
+    titleInput.tabIndex = -1;
+  } else {
+    titleInput.addEventListener('input', () => {
+      note.title = titleInput.value;
+      note.updatedAt = Date.now();
+      saveNoteDebounced();
+      markNoteDirty();
+    });
+  }
+  ed.appendChild(titleInput);
+
+  /* Теги + мелкие кнопки */
+  const tagsLine = document.createElement('div');
+  tagsLine.style.cssText = 'padding:4px 24px 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;';
+  const renderTagsLine = () => {
+    tagsLine.innerHTML = '';
+    const chips = renderTagChips(note.tags); if (chips) tagsLine.appendChild(chips);
+    if (!readMode){
+      const editBtn = document.createElement('button');
+      editBtn.className='card-btn'; editBtn.textContent='📑 Изменить теги';
+      editBtn.style.fontSize = '11.5px';
+      editBtn.onclick = () => editTagsFor(note, ()=>{ saveNoteNow(); renderTagsLine(); markNoteDirty(); });
+      tagsLine.appendChild(editBtn);
+    }
+  };
+  renderTagsLine();
+  ed.appendChild(tagsLine);
+
+  /* Тело — contentEditable */
+  const bodyInput = document.createElement('div');
+  bodyInput.className = 'instr-content note-body-input';
+  bodyInput.contentEditable = readMode ? 'false' : 'true';
+  bodyInput.spellcheck = false;
+  bodyInput.style.background = 'transparent';
+  bodyInput.style.minHeight = '320px';
+  bodyInput.innerHTML = note.body || '<p><br></p>';
+
+  if (!readMode){
+    bodyInput.addEventListener('input', () => {
+      note.body = bodyInput.innerHTML;
+      note.updatedAt = Date.now();
+      saveNoteDebounced();
+      markNoteDirty();
+    });
+    /* Вставка картинки из буфера — с автосжатием */
+    bodyInput.addEventListener('paste', (e) => {
+      const items = (e.clipboardData || {}).items || [];
+      for (const item of items){
+        if (item.type && item.type.startsWith('image/')){
+          e.preventDefault();
+          const file = item.getAsFile();
+          if (file){
+            compressImage(file, 1200, .82).then(dataUrl => {
+              document.execCommand('insertHTML', false,
+                '<img src="' + dataUrl + '" style="max-width:100%">');
+              note.body = bodyInput.innerHTML;
+              saveNoteDebounced();
+            });
+          }
+          return;
+        }
+      }
+    });
+    /* Ctrl+B / Ctrl+I / Ctrl+U работают автоматически в contentEditable */
+  }
+  ed.appendChild(bodyInput);
+
+  /* Мета */
+  const meta = document.createElement('div'); meta.className='instr-meta';
+  meta.style.background = 'rgba(255,255,255,.45)';
+  meta.style.borderTopColor = col.border;
+  if (readMode){
+    meta.innerHTML = '<span style="color:var(--primary);font-weight:600;">👁 Режим просмотра</span>' +
+      '<span>Обновлено: ' + fmtDate(note.updatedAt) + '</span>';
+  } else {
+    meta.innerHTML = '<span class="saved-flag note-saved-flag">💾 Сохранено</span>' +
+      '<span>Обновлено: ' + fmtDate(note.updatedAt) + '</span>';
+  }
+  ed.appendChild(meta);
+
+  wrap.appendChild(ed);
+
+  /* Удалить — внизу отдельно */
+  if (!readMode){
+    const delWrap = document.createElement('div');
+    delWrap.style.cssText = 'margin-top:16px;text-align:right;';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn danger';
+    delBtn.textContent = '🗑 Удалить заметку';
+    delBtn.onclick = () => {
+      if (!confirm('Удалить заметку «' + (note.title || 'без названия') + '»?')) return;
+      db.notes = db.notes.filter(x => x.id !== note.id);
+      saveDB();
+      editingNote = null;
+      render();
+      toast('Заметка удалена','info');
+    };
+    delWrap.appendChild(delBtn);
+    wrap.appendChild(delWrap);
+  }
+
+  area.appendChild(wrap);
+
+  function markNoteDirty(){
+    const flag = meta.querySelector('.note-saved-flag');
+    if (!flag) return;
+    flag.textContent = '✏️ Есть несохранённые изменения';
+    flag.classList.add('dirty');
+  }
+}
+
+/* ============================================================
+   КАРТЫ ПОДКЛЮЧЕНИЙ — СПИСОК С КАСКАДНЫМИ ФИЛЬТРАМИ
+   ============================================================ */
+let wiringFilter = { brand: '', model: '', year: '' };
+
+function renderWiringList(area){
+  area.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.width = '100%';
+
+  const list = db.wiring || [];
+  const head = document.createElement('div'); head.className='list-head';
+  head.innerHTML = '<h2 style="font-size:18px;">🔌 Карты подключений <span class="count-badge">' +
+    list.length + '</span></h2>';
+  wrap.appendChild(head);
+
+  if (!list.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    if (isBuildMode()){
+      e.innerHTML = '<span class="big-icon">🔌</span>Карты подключений пока не заполнены.';
+    } else {
+      e.innerHTML = '<span class="big-icon">🔌</span>Пока нет ни одной карты.<br>' +
+        'Нажмите «➕ Новая карта подключения».';
+    }
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+
+  /* ============================================================
+     КАСКАДНЫЕ ФИЛЬТРЫ: Марка → Модель → Год
+     ============================================================ */
+  const allBrands = uniq(list.map(w => w.brand).filter(Boolean)).sort((a,b)=>a.localeCompare(b,'ru'));
+
+  /* Если выбранная марка исчезла (карточку удалили) — сбрасываем */
+  if (wiringFilter.brand && !allBrands.includes(wiringFilter.brand)){
+    wiringFilter.brand = '';
+    wiringFilter.model = '';
+    wiringFilter.year  = '';
+  }
+
+  const brandsForModels = list.filter(w => !wiringFilter.brand || w.brand === wiringFilter.brand);
+  const allModels = uniq(brandsForModels.map(w => w.model).filter(Boolean))
+    .sort((a,b)=>a.localeCompare(b,'ru'));
+
+  if (wiringFilter.model && !allModels.includes(wiringFilter.model)){
+    wiringFilter.model = '';
+    wiringFilter.year  = '';
+  }
+
+  const forYears = brandsForModels.filter(w => !wiringFilter.model || w.model === wiringFilter.model);
+  const allYears = uniq(forYears.map(w => String(w.year)).filter(Boolean))
+    .sort((a,b)=>String(b).localeCompare(String(a),'ru'));
+
+  if (wiringFilter.year && !allYears.includes(wiringFilter.year)){
+    wiringFilter.year = '';
+  }
+
+  const filterBar = document.createElement('div');
+  filterBar.className = 'filter-bar';
+
+  /* Марка */
+  const brandSel = document.createElement('select');
+  brandSel.className = 'filter-sort';
+  brandSel.style.minWidth = '200px';
+  brandSel.style.flex = '1 1 200px';
+  const optB0 = document.createElement('option'); optB0.value=''; optB0.textContent='— Марка —';
+  brandSel.appendChild(optB0);
+  allBrands.forEach(b => {
+    const o = document.createElement('option'); o.value = b; o.textContent = b;
+    if (wiringFilter.brand === b) o.selected = true;
+    brandSel.appendChild(o);
+  });
+  brandSel.onchange = () => {
+    wiringFilter.brand = brandSel.value;
+    wiringFilter.model = '';
+    wiringFilter.year  = '';
+    render();
+  };
+  filterBar.appendChild(brandSel);
+
+  /* Модель */
+  const modelSel = document.createElement('select');
+  modelSel.className = 'filter-sort';
+  modelSel.style.minWidth = '180px';
+  modelSel.style.flex = '1 1 180px';
+  const optM0 = document.createElement('option'); optM0.value=''; optM0.textContent='— Модель —';
+  modelSel.appendChild(optM0);
+  allModels.forEach(m => {
+    const o = document.createElement('option'); o.value = m; o.textContent = m;
+    if (wiringFilter.model === m) o.selected = true;
+    modelSel.appendChild(o);
+  });
+  modelSel.disabled = allModels.length === 0;
+  modelSel.onchange = () => {
+    wiringFilter.model = modelSel.value;
+    wiringFilter.year  = '';
+    render();
+  };
+  filterBar.appendChild(modelSel);
+
+  /* Год */
+  const yearSel = document.createElement('select');
+  yearSel.className = 'filter-sort';
+  yearSel.style.minWidth = '140px';
+  yearSel.style.flex = '0 1 140px';
+  const optY0 = document.createElement('option'); optY0.value=''; optY0.textContent='— Год выпуска —';
+  yearSel.appendChild(optY0);
+  allYears.forEach(y => {
+    const o = document.createElement('option'); o.value = y; o.textContent = y;
+    if (wiringFilter.year === String(y)) o.selected = true;
+    yearSel.appendChild(o);
+  });
+  yearSel.disabled = allYears.length === 0;
+  yearSel.onchange = () => {
+    wiringFilter.year = yearSel.value;
+    render();
+  };
+  filterBar.appendChild(yearSel);
+
+  /* Сброс */
+  if (wiringFilter.brand || wiringFilter.model || wiringFilter.year){
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'filter-clear';
+    clearBtn.textContent = '× сбросить фильтр';
+    clearBtn.onclick = () => {
+      wiringFilter.brand = '';
+      wiringFilter.model = '';
+      wiringFilter.year  = '';
+      render();
+    };
+    filterBar.appendChild(clearBtn);
+  }
+
+  wrap.appendChild(filterBar);
+
+  /* ============================================================
+     ФИЛЬТРАЦИЯ
+     ============================================================ */
+  let filtered = list.slice();
+  if (wiringFilter.brand) filtered = filtered.filter(w => w.brand === wiringFilter.brand);
+  if (wiringFilter.model) filtered = filtered.filter(w => w.model === wiringFilter.model);
+  if (wiringFilter.year)  filtered = filtered.filter(w => String(w.year) === String(wiringFilter.year));
+
+  filtered.sort((a,b) => {
+    const ba = (a.brand||'').localeCompare(b.brand||'','ru');
+    if (ba !== 0) return ba;
+    const ma = (a.model||'').localeCompare(b.model||'','ru');
+    if (ma !== 0) return ma;
+    return String(b.year||'').localeCompare(String(a.year||''));
+  });
+
+  if (!filtered.length){
+    const e = document.createElement('div'); e.className='empty-state';
+    e.textContent = 'Ничего не найдено по выбранному фильтру.';
+    wrap.appendChild(e);
+    area.appendChild(wrap);
+    return;
+  }
+
+  /* ============================================================
+     СЕТКА КАРТОЧЕК
+     ============================================================ */
+  const grid = document.createElement('div');
+  grid.className = 'card-grid';
+  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(240px, 1fr))';
+
+  filtered.forEach(w => {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.style.padding = '0';
+    card.style.overflow = 'hidden';
+    card.style.cursor = 'pointer';
+
+    /* Обложка */
+    const coverWrap = document.createElement('div');
+    coverWrap.style.cssText =
+      'width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#1e293b,#0f172a);' +
+      'display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;';
+
+    if (w.coverImage){
+      const img = document.createElement('img');
+      img.src = w.coverImage;
+      img.alt = (w.brand||'') + ' ' + (w.model||'');
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      coverWrap.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.style.cssText = 'color:#64748b;font-size:36px;opacity:.5;';
+      ph.textContent = '🚛';
+      coverWrap.appendChild(ph);
+    }
+
+    /* Счётчик фото */
+    const photoCount = (w.gallery || []).length + (w.coverImage ? 1 : 0);
+    if (photoCount > 1){
+      const badge = document.createElement('span');
+      badge.style.cssText =
+        'position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,.75);color:#fff;' +
+        'padding:3px 9px;border-radius:10px;font-size:11px;font-weight:700;';
+      badge.textContent = '📷 ' + photoCount;
+      coverWrap.appendChild(badge);
+    }
+
+    card.appendChild(coverWrap);
+
+    /* Подпись под фото */
+    const info = document.createElement('div');
+    info.style.cssText = 'padding:12px 14px 14px;';
+    const titleLine = [(w.brand||'').toUpperCase(), w.model, w.year].filter(Boolean).join(', ');
+    info.innerHTML =
+      '<div style="font-weight:700;font-size:14.5px;color:var(--primary);line-height:1.35;word-break:break-word;">' +
+        escapeHtml(titleLine || '(без названия)') +
+      '</div>' +
+      (w.description
+        ? '<div style="font-size:11.5px;color:var(--text-3);margin-top:4px;overflow:hidden;' +
+          'text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">' +
+          escapeHtml(stripHtml(w.description)) +
+          '</div>'
+        : '');
+    card.appendChild(info);
+
+    /* Действия в правом верхнем углу (только в админке) */
+    if (!isBuildMode()){
+      const acts = document.createElement('div');
+      acts.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;gap:4px;';
+      card.style.position = 'relative';
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'card-btn';
+      editBtn.style.cssText = 'background:rgba(255,255,255,.92);border:1px solid var(--border);font-size:12px;padding:4px 8px;';
+      editBtn.textContent = '✏️';
+      editBtn.title = 'Редактировать';
+      editBtn.onclick = (e) => {
+        e.stopPropagation();
+        editingWiring = w;
+        render();
+      };
+      acts.appendChild(editBtn);
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'card-btn danger';
+      delBtn.style.cssText = 'background:rgba(255,255,255,.92);border:1px solid #fecaca;font-size:12px;padding:4px 8px;';
+      delBtn.textContent = '🗑';
+      delBtn.title = 'Удалить';
+      delBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (!confirm('Удалить карту «' + titleLine + '»?')) return;
+        db.wiring = db.wiring.filter(x => x.id !== w.id);
+        saveDB();
+        render();
+        toast('Карта удалена','info');
+      };
+      acts.appendChild(delBtn);
+
+      card.appendChild(acts);
+    }
+
+    card.onclick = () => {
+      editingWiring = w;
+      render();
+    };
+
+    grid.appendChild(card);
+  });
+
+  wrap.appendChild(grid);
+  area.appendChild(wrap);
+}
+
+/* ============================================================
+   КАРТЫ ПОДКЛЮЧЕНИЙ — РЕДАКТОР / ПРОСМОТР
+   ============================================================ */
+function renderWiringEditor(area, wiring){
+  const readMode = isBuildMode();
+  const isNew = !wiring.brand && !wiring.model && !wiring.coverImage && !wiring.gallery.length && !wiring.description;
+
+  area.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.className = 'instr-wrap';
+  wrap.style.maxWidth = '1100px';
+
+  const card = document.createElement('div');
+  card.className = 'conv-card';
+
+  /* ============================================================
+     ШАПКА
+     ============================================================ */
+  const h = document.createElement('h3');
+  h.textContent = readMode
+    ? '🔌 ' + [(wiring.brand||'').toUpperCase(), wiring.model, wiring.year].filter(Boolean).join(', ')
+    : (isNew ? '➕ Новая карта подключения' : '✏️ Редактирование карты');
+  h.style.marginBottom = '16px';
+  card.appendChild(h);
+
+  /* ============================================================
+     ПОЛЯ: Марка / Модель / Год
+     ============================================================ */
+  const meta = document.createElement('div');
+  meta.className = 'conv-options';
+  meta.style.marginBottom = '18px';
+
+  /* Марка */
+  const brandWrap = document.createElement('div');
+  brandWrap.innerHTML = '<label>Марка</label>';
+  const brandInp = document.createElement('input');
+  brandInp.type = 'text';
+  brandInp.id = 'wiring-brand';
+  brandInp.value = wiring.brand || '';
+  brandInp.placeholder = 'Например: ASHOK LEYLAND';
+  brandInp.readOnly = readMode;
+  brandInp.style.textTransform = 'uppercase';
+  if (!readMode){
+    brandInp.addEventListener('input', () => {
+      wiring.brand = brandInp.value;
+      wiring.updatedAt = Date.now();
+      saveDB();
+    });
+  }
+  brandWrap.appendChild(brandInp);
+  meta.appendChild(brandWrap);
+
+  /* Модель */
+  const modelWrap = document.createElement('div');
+  modelWrap.innerHTML = '<label>Модель</label>';
+  const modelInp = document.createElement('input');
+  modelInp.type = 'text';
+  modelInp.id = 'wiring-model';
+  modelInp.value = wiring.model || '';
+  modelInp.placeholder = 'Например: 122';
+  modelInp.readOnly = readMode;
+  if (!readMode){
+    modelInp.addEventListener('input', () => {
+      wiring.model = modelInp.value;
+      wiring.updatedAt = Date.now();
+      saveDB();
+    });
+  }
+  modelWrap.appendChild(modelInp);
+  meta.appendChild(modelWrap);
+
+  /* Год */
+  const yearWrap = document.createElement('div');
+  yearWrap.innerHTML = '<label>Год выпуска</label>';
+  const yearInp = document.createElement('input');
+  yearInp.type = 'text';
+  yearInp.id = 'wiring-year';
+  yearInp.value = wiring.year || '';
+  yearInp.placeholder = 'Например: 2024';
+  yearInp.readOnly = readMode;
+  if (!readMode){
+    yearInp.addEventListener('input', () => {
+      wiring.year = yearInp.value;
+      wiring.updatedAt = Date.now();
+      saveDB();
+    });
+  }
+  yearWrap.appendChild(yearInp);
+  meta.appendChild(yearWrap);
+
+  card.appendChild(meta);
+
+  /* ============================================================
+     ОБЛОЖКА
+     ============================================================ */
+  const coverSection = document.createElement('div');
+  coverSection.style.marginBottom = '22px';
+  const coverTitle = document.createElement('label');
+  coverTitle.style.cssText = 'display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px;';
+  coverTitle.textContent = 'Обложка (главное фото автомобиля)';
+  coverSection.appendChild(coverTitle);
+
+  const coverArea = document.createElement('div');
+  coverArea.style.cssText =
+    'display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;';
+
+  const coverPreview = document.createElement('div');
+  coverPreview.style.cssText =
+    'width:240px;height:180px;border-radius:10px;background:var(--panel-2);' +
+    'border:2px dashed var(--border-2);display:flex;align-items:center;justify-content:center;' +
+    'overflow:hidden;flex:0 0 auto;cursor:' + (readMode ? 'default' : 'pointer') + ';';
+
+  if (wiring.coverImage){
+    const img = document.createElement('img');
+    img.src = wiring.coverImage;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+    coverPreview.appendChild(img);
+    coverPreview.style.borderStyle = 'solid';
+    coverPreview.onclick = () => openImagePreview(wiring.coverImage, 'Обложка');
+  } else {
+    const ph = document.createElement('div');
+    ph.style.cssText = 'color:var(--text-3);font-size:13px;text-align:center;padding:10px;';
+    ph.innerHTML = '🚛<br>Нет обложки';
+    coverPreview.appendChild(ph);
+  }
+
+  coverArea.appendChild(coverPreview);
+
+  if (!readMode){
+    const coverBtns = document.createElement('div');
+    coverBtns.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
+    const upBtn = document.createElement('button');
+    upBtn.className = 'btn primary';
+    upBtn.textContent = '📁 Загрузить обложку';
+    upBtn.onclick = () => {
+      const inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/*';
+      inp.onchange = async () => {
+        const f = inp.files[0]; if (!f) return;
+        try {
+          toast('Сжимаю изображение…','info');
+          const dataUrl = await compressImage(f, 1600, .85);
+          wiring.coverImage = dataUrl;
+          wiring.updatedAt = Date.now();
+          saveDB();
+          render();
+          toast('Обложка загружена','success');
+        } catch(e){ toast('Ошибка: ' + e.message,'error'); }
+      };
+      inp.click();
+    };
+    coverBtns.appendChild(upBtn);
+
+    if (wiring.coverImage){
+      const delBtn = document.createElement('button');
+      delBtn.className = 'btn';
+      delBtn.textContent = '🗑 Удалить обложку';
+      delBtn.onclick = () => {
+        if (!confirm('Удалить обложку?')) return;
+        wiring.coverImage = '';
+        wiring.updatedAt = Date.now();
+        saveDB();
+        render();
+      };
+      coverBtns.appendChild(delBtn);
+    }
+    coverArea.appendChild(coverBtns);
+  }
+
+  coverSection.appendChild(coverArea);
+  card.appendChild(coverSection);
+
+  /* ============================================================
+     ГАЛЕРЕЯ
+     ============================================================ */
+  const galSection = document.createElement('div');
+  galSection.style.marginBottom = '22px';
+
+  const galTitle = document.createElement('label');
+  galTitle.style.cssText = 'display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px;';
+  galTitle.textContent = 'Галерея фотографий с подписями (' + (wiring.gallery||[]).length + ')';
+  galSection.appendChild(galTitle);
+
+  const galGrid = document.createElement('div');
+  galGrid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:12px;';
+
+  (wiring.gallery || []).forEach((g, idx) => {
+    const item = document.createElement('div');
+    item.style.cssText =
+      'background:var(--panel-2);border:1px solid var(--border);border-radius:10px;' +
+      'overflow:hidden;display:flex;flex-direction:column;position:relative;';
+
+    const imgWrap = document.createElement('div');
+    imgWrap.style.cssText = 'width:100%;aspect-ratio:4/3;background:#0f172a;overflow:hidden;cursor:zoom-in;';
+    const img = document.createElement('img');
+    img.src = g.image;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+    img.onclick = () => openImagePreview(g.image, g.caption || 'Фото ' + (idx+1));
+    imgWrap.appendChild(img);
+    item.appendChild(imgWrap);
+
+    const capWrap = document.createElement('div');
+    capWrap.style.cssText = 'padding:8px 10px;';
+
+    if (readMode){
+      const cap = document.createElement('div');
+      cap.style.cssText = 'font-size:12.5px;color:var(--text);';
+      cap.textContent = g.caption || '(без подписи)';
+      capWrap.appendChild(cap);
+    } else {
+      const capInp = document.createElement('input');
+      capInp.type = 'text';
+      capInp.value = g.caption || '';
+      capInp.placeholder = 'Подпись к фото…';
+      capInp.style.cssText =
+        'width:100%;padding:5px 8px;border:1px solid var(--border-2);border-radius:6px;' +
+        'font-size:12.5px;background:#fff;color:var(--text);font-family:inherit;';
+      capInp.oninput = () => {
+        g.caption = capInp.value;
+        wiring.updatedAt = Date.now();
+        saveDB();
+      };
+      capWrap.appendChild(capInp);
+    }
+
+    item.appendChild(capWrap);
+
+    if (!readMode){
+      const delBtn = document.createElement('button');
+      delBtn.style.cssText =
+        'position:absolute;top:6px;right:6px;background:rgba(220,38,38,.92);color:#fff;' +
+        'border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:14px;';
+      delBtn.textContent = '✕';
+      delBtn.title = 'Удалить фото';
+      delBtn.onclick = () => {
+        if (!confirm('Удалить это фото из галереи?')) return;
+        wiring.gallery.splice(idx, 1);
+        wiring.updatedAt = Date.now();
+        saveDB();
+        render();
+      };
+      item.appendChild(delBtn);
+    }
+
+    galGrid.appendChild(item);
+  });
+
+  galSection.appendChild(galGrid);
+
+  if (!readMode){
+    const addPhotoBtn = document.createElement('button');
+    addPhotoBtn.className = 'btn primary';
+    addPhotoBtn.style.marginTop = '12px';
+    addPhotoBtn.textContent = '➕ Добавить фото в галерею';
+    addPhotoBtn.onclick = () => {
+      const inp = document.createElement('input');
+      inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+      inp.onchange = async () => {
+        const files = [...inp.files];
+        if (!files.length) return;
+        toast('Обрабатываю ' + files.length + ' фото…','info');
+        for (const f of files){
+          try {
+            const dataUrl = await compressImage(f, 1400, .82);
+            wiring.gallery.push({ id: uid(), image: dataUrl, caption: '' });
+          } catch(_){}
+        }
+        wiring.updatedAt = Date.now();
+        saveDB();
+        render();
+        toast('Добавлено: ' + files.length,'success');
+      };
+      inp.click();
+    };
+    galSection.appendChild(addPhotoBtn);
+  }
+
+  card.appendChild(galSection);
+
+  /* ============================================================
+     ОПИСАНИЕ
+     ============================================================ */
+  const descSection = document.createElement('div');
+  descSection.style.marginBottom = '14px';
+  const descTitle = document.createElement('label');
+  descTitle.style.cssText = 'display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px;';
+  descTitle.textContent = 'Текстовое описание';
+  descSection.appendChild(descTitle);
+
+  if (readMode){
+    const view = document.createElement('div');
+    view.style.cssText = 'font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;';
+    view.textContent = wiring.description || '—';
+    descSection.appendChild(view);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.id = 'wiring-description';
+    ta.value = wiring.description || '';
+    ta.placeholder = 'Разъёмы, распиновка, особенности подключения…';
+    ta.style.cssText =
+      'width:100%;min-height:200px;padding:12px 14px;border:1px solid var(--border-2);' +
+      'border-radius:8px;font:inherit;font-size:13.5px;line-height:1.6;resize:vertical;' +
+      'background:#fff;color:var(--text);font-family:inherit;';
+    ta.oninput = () => {
+      wiring.description = ta.value;
+      wiring.updatedAt = Date.now();
+      saveDB();
+    };
+    descSection.appendChild(ta);
+  }
+  card.appendChild(descSection);
+
+  /* ============================================================
+     МЕТА
+     ============================================================ */
+  const metaLine = document.createElement('div');
+  metaLine.className = 'hint';
+  metaLine.style.marginTop = '6px';
+  metaLine.textContent = 'Создано: ' + fmtDate(wiring.createdAt) +
+    ' · Обновлено: ' + fmtDate(wiring.updatedAt);
+  card.appendChild(metaLine);
+
+  /* Удалить карточку (внизу, в админке) */
+  if (!readMode && !isNew){
+    const delWrap = document.createElement('div');
+    delWrap.style.cssText = 'margin-top:20px;padding-top:16px;border-top:1px dashed var(--border);text-align:right;';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn danger';
+    delBtn.textContent = '🗑 Удалить карту подключения';
+    delBtn.onclick = () => {
+      if (!confirm('Удалить карту подключения?')) return;
+      db.wiring = db.wiring.filter(x => x.id !== wiring.id);
+      saveDB();
+      editingWiring = null;
+      render();
+      toast('Карта удалена','info');
+    };
+    delWrap.appendChild(delBtn);
+    card.appendChild(delWrap);
+  }
+
+  wrap.appendChild(card);
+  area.appendChild(wrap);
+}
+
+/* ============================================================
    РАЗДЕЛ «МАРШРУТЫ» — СПИСОК
    ============================================================ */
 function renderRoutesList(area){
@@ -11192,6 +13763,37 @@ function buildSearchIndex(){
       [c.tacho ? 'тахо ' + c.tacho : '', c.newK ? '→ ' + c.newK : ''].filter(Boolean).join(' · '), '');
   });
 
+   /* FAQ */
+  (db.faq||[]).forEach(f => {
+    push('faq', 'FAQ', '❓', f.id, f.question,
+      (f.tags && f.tags.length ? f.tags.join(' · ') + ' · ' : '') + 'обновлено ' + fmtDate(f.updatedAt),
+      stripHtml(f.answer||'').slice(0, 400));
+  });
+
+  /* Карты подключений */
+  (db.wiring||[]).forEach(w => {
+    push('wiring', 'Карты подключений', '🔌', w.id,
+      [(w.brand||'').toUpperCase(), w.model, w.year].filter(Boolean).join(' ') || '(без названия)',
+      (w.gallery?.length || 0) + ' фото · ' + (w.description ? stripHtml(w.description).slice(0,80) : ''),
+      (w.brand||'') + ' ' + (w.model||'') + ' ' + (w.year||'') + ' ' + (w.description||''));
+  });
+
+  /* Заметки */
+  (db.notes||[]).forEach(n => {
+    push('note', 'Заметки', '📝', n.id, n.title,
+      (n.tags && n.tags.length ? n.tags.join(' · ') + ' · ' : '') + 'обновлено ' + fmtDate(n.updatedAt),
+      stripHtml(n.body||'').slice(0, 400));
+  });
+
+  /* Заявители */
+  (db.applicants||[]).forEach(a => {
+    const fio = [a.lastName, a.firstName, a.middleName].filter(Boolean).join(' ');
+    const org = (db.organizations||[]).find(o => o.id === a.organizationId);
+    push('applicant', 'Заявители', '👤', a.id, fio || '(без ФИО)',
+      [org ? org.name : '', a.inn ? 'ИНН ' + a.inn : '', a.snils ? 'СНИЛС ' + a.snils : '']
+        .filter(Boolean).join(' · '),
+      (a.dulSeries||'') + ' ' + (a.dulNumber||'') + ' ' + (a.phone||'') + ' ' + (a.email||''));
+  }); 
   return idx;
 }
 
@@ -11217,10 +13819,13 @@ function openGlobalSearch(){
   inp.placeholder = 'Поиск по всему приложению — шаблоны, копии, работы, материалы, инструкции…';
   inp.autocomplete = 'off';
   iw.appendChild(inp);
-  const kbd = document.createElement('span');
-  kbd.className = 'gs-kbd';
-  kbd.textContent = 'Esc';
-  iw.appendChild(kbd);
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'gs-kbd gs-close-btn';
+  closeBtn.textContent = '✕';
+  closeBtn.title = 'Закрыть поиск';
+  closeBtn.onclick = () => closeSearch();
+  iw.appendChild(closeBtn);
   modal.appendChild(iw);
 
   /* Результаты */
@@ -11483,6 +14088,46 @@ function gotoResult(kind, id){
       toolsTab = 'kw';
       render();
       toast('Открыты расчёты K/W','info');
+      return;
+    }
+    if (kind === 'faq'){
+      const f = (db.faq||[]).find(x => x.id === id);
+      if (!f) return;
+      activeSection = 'reference';
+      refTab = 'faq';
+      editingFaq = f;
+      refReadMode = isBuildMode();
+      render();
+      toast('Открыт FAQ','info');
+      return;
+    }
+    if (kind === 'wiring'){
+      const w = (db.wiring||[]).find(x => x.id === id);
+      if (!w) return;
+      activeSection = 'reference';
+      refTab = 'wiring';
+      editingWiring = w;
+      render();
+      toast('Открыта карта подключения','info');
+      return;
+    }
+    if (kind === 'note'){
+      const n = (db.notes||[]).find(x => x.id === id);
+      if (!n) return;
+      activeSection = 'notes';
+      editingNote = n;
+      render();
+      toast('Открыта заметка','info');
+      return;
+    }
+    if (kind === 'applicant'){
+      const a = (db.applicants||[]).find(x => x.id === id);
+      if (!a) return;
+      activeSection = 'orgs';
+      refsTab = 'applicants';
+      editingApplicant = a;
+      render();
+      toast('Открыт заявитель','info');
       return;
     }
   } catch(e){
@@ -12579,24 +15224,30 @@ function showBuildDialog(){
     ]},
     { id:'orgs', label:'💼 Коммерция', children:[
       { id:'organizations', label:'Организации', defaultOn:true },
-      { id:'works',         label:'Работы', defaultOn:true },
-      { id:'materials',     label:'Материалы', defaultOn:true },
+      { id:'applicants',    label:'Заявители',   defaultOn:true },
+      { id:'works',         label:'Работы',      defaultOn:true },
+      { id:'materials',     label:'Материалы',   defaultOn:true },
       { id:'print',         label:'Печать прайса', defaultOn:true }
     ]},
     { id:'tools', label:'🧰 Инструменты', children:[
       { id:'tire', label:'Длина окружности (W)', defaultOn:true },
-      { id:'kw',   label:'Пересчёт K/W', defaultOn:true },
-      { id:'conv', label:'Конвертер файлов', defaultOn:true }
+      { id:'kw',   label:'Пересчёт K/W',         defaultOn:true },
+      { id:'conv', label:'Конвертер файлов',     defaultOn:true }
     ]},
-    { id:'reference', label:'📖 Справочник (инструкции)', children:[] },
+    { id:'reference', label:'📖 Справочник', children:[
+      { id:'instructions', label:'Инструкции', defaultOn:true },
+      { id:'faq',          label:'FAQ',        defaultOn:true },
+      { id:'wiring',       label:'Карты подключений', defaultOn:true }
+    ]},
     { id:'routes',    label:'🗺 Маршруты', children:[] },
     { id:'reports',   label:'📊 Отчёты', children:[] },
     { id:'learning',  label:'🎓 Обучение (курсы)', children:[] },
+    { id:'notes',     label:'📝 Заметки', children:[] },
     { id:'settings',  label:'⚙️ Настройки', children:[] },
     { id:'db', label:'🗄 Работа с базой данных', children:[
       { id:'export',  label:'Кнопка «Экспорт БД»', defaultOn:true },
       { id:'import',  label:'Кнопка «Импорт БД»', defaultOn:true },
-      { id:'storage', label:'Кнопка «Хранилище» (инфо о месте)', defaultOn:true }
+      { id:'storage', label:'Кнопка «Хранилище»', defaultOn:true }
     ]}
   ];
 
@@ -12817,6 +15468,10 @@ function showExportDialog(){
     { key:'tireCalcs',     label:'🛞 Расчёты W',            items: (db.tireCalcs||[]).map(x => ({ id:x.id, label:x.name || x.marking, meta: x.C ? x.C.toFixed(0) + ' мм' : '' })) },
     { key:'kwCalcs',       label:'🔄 Расчёты K/W',          items: (db.kwCalcs||[]).map(x => ({ id:x.id, label:x.name, meta: '' })) },
     { key:'courses', label:'🎓 Курсы обучения', items: (db.courses||[]).map(x => ({ id:x.id, label:x.name, meta: (x.steps?.length||0) + ' шагов' })) },
+    { key:'faq',        label:'❓ FAQ',                    items: (db.faq||[]).map(x => ({ id:x.id, label:x.question, meta:'' })) },
+    { key:'wiring',     label:'🔌 Карты подключений',      items: (db.wiring||[]).map(x => ({ id:x.id, label: (x.brand||'') + ' ' + (x.model||''), meta: x.year||'' })) },
+    { key:'notes',      label:'📝 Заметки',                items: (db.notes||[]).map(x => ({ id:x.id, label:x.title, meta:'' })) },
+    { key:'applicants', label:'👤 Заявители',              items: (db.applicants||[]).map(x => ({ id:x.id, label: [x.lastName,x.firstName,x.middleName].filter(Boolean).join(' '), meta:'' })) },
   ];
 
   /* --- Состояние выбора --- */
@@ -13103,7 +15758,11 @@ function showExportDialog(){
       routes:       (db.routes       ||[]).filter(x => selection.routes.has(x.id)),
       tireCalcs:    (db.tireCalcs    ||[]).filter(x => selection.tireCalcs.has(x.id)),
       kwCalcs:      (db.kwCalcs      ||[]).filter(x => selection.kwCalcs.has(x.id)),
-      courses:      (db.courses      ||[]).filter(x => selection.courses.has(x.id))
+      courses:      (db.courses      ||[]).filter(x => selection.courses.has(x.id)),
+      faq:        (db.faq        ||[]).filter(x => selection.faq.has(x.id)),
+      notes:      (db.notes      ||[]).filter(x => selection.notes.has(x.id)),
+      wiring:     (db.wiring     ||[]).filter(x => selection.wiring.has(x.id)),
+      applicants: (db.applicants ||[]).filter(x => selection.applicants.has(x.id)),
     };
 
     /* Настройки — если отмечен раздел */
@@ -13163,7 +15822,11 @@ function exportDB(){
     routes: db.routes || [],
     works: db.works || [],
     materials: db.materials || [],
-    courses: db.courses || []
+    courses: db.courses || [],
+    faq: db.faq || [],
+    notes: db.notes || [],
+    wiring: db.wiring || [],
+    applicants: db.applicants || []
   };
   downloadJSON(payload, `avtocom-full-${new Date().toISOString().slice(0,10)}.json`);
   toast('База данных выгружена','success');
@@ -13295,7 +15958,10 @@ function replaceDB(data){
   db.works     = (Array.isArray(data.works)?data.works:[]).map(x => normalizeRefItem(x, 'work'));
   db.materials = (Array.isArray(data.materials)?data.materials:[]).map(x => normalizeRefItem(x, 'material'));
   db.courses = (Array.isArray(data.courses)?data.courses:[]).map(normalizeCourse);
-
+  db.faq        = (Array.isArray(data.faq)?data.faq:[]).map(normalizeFaq);
+  db.notes      = (Array.isArray(data.notes)?data.notes:[]).map(normalizeNote);
+  db.wiring     = (Array.isArray(data.wiring)?data.wiring:[]).map(normalizeWiring);
+  db.applicants = (Array.isArray(data.applicants)?data.applicants:[]).map(normalizeApplicant);
   /* Единицы измерения */
   if (['px','cm','mm'].includes(data.unit)){
     unit = data.unit;
@@ -13314,7 +15980,7 @@ function replaceDB(data){
   toast('База данных заменена','success');
 }
 function mergeDB(data){
-  const counts = { templates:0, documents:0, tireCalcs:0, kwCalcs:0, instructions:0, organizations:0, routes:0, works:0, materials:0, userSettings:0, courses: 0 };
+  const counts = { templates:0, documents:0, tireCalcs:0, kwCalcs:0, instructions:0, organizations:0, routes:0, works:0, materials:0, userSettings:0, courses: 0, faq:0, notes:0, wiring:0, applicants:0 };
   const mergeOne = (target, incoming, norm)=>{
     const ids = new Set(target.map(x=>x.id));
     let n = 0;
@@ -13340,7 +16006,10 @@ function mergeDB(data){
   counts.works     = mergeOne(db.works,     data.works,     x => normalizeRefItem(x, 'work'));
   counts.materials = mergeOne(db.materials, data.materials, x => normalizeRefItem(x, 'material'));
   counts.courses = mergeOne(db.courses, data.courses, normalizeCourse);
-
+  counts.faq        = mergeOne(db.faq,        data.faq,        normalizeFaq);
+  counts.notes      = mergeOne(db.notes,      data.notes,      normalizeNote);
+  counts.wiring     = mergeOne(db.wiring,     data.wiring,     normalizeWiring);
+  counts.applicants = mergeOne(db.applicants, data.applicants, normalizeApplicant);
   /* Настройки — спрашиваем, применять ли */
   if (data.userSettings && typeof data.userSettings === 'object'){
     const apply = confirm('Импортировать также настройки пользователя?\n\n' +
@@ -14106,16 +16775,38 @@ function renderCourseEditor(area){
   area.appendChild(wrap);
 }
 
+/* ============================================================
+   FLUSH-ФУНКЦИИ ДЛЯ ДЕБАУНС-СОХРАНЕНИЙ
+   ============================================================ */
+let _courseSaveTimer = null;
+let _noteSaveTimer   = null;
+
+function flushCourseSave(){
+  if (_courseSaveTimer){
+    clearTimeout(_courseSaveTimer);
+    _courseSaveTimer = null;
+    try { saveDB(); } catch(_){}
+  }
+}
+
+function flushNoteSave(){
+  if (_noteSaveTimer){
+    clearTimeout(_noteSaveTimer);
+    _noteSaveTimer = null;
+    if (typeof saveNoteNow === 'function') saveNoteNow();
+  }
+}
+
 /* Дебаунс для сохранения курса — не чаще раза в N мс */
 let courseSaveTimer = null;
 
 function touchCourse(course){
   course.updatedAt = Date.now();
-  clearTimeout(courseSaveTimer);
+  clearTimeout(_courseSaveTimer);
   const delay = (userSettings && userSettings.autoSaveDelay) || 400;
-  courseSaveTimer = setTimeout(() => {
+  _courseSaveTimer = setTimeout(() => {
     saveDB();
-    courseSaveTimer = null;
+    _courseSaveTimer = null;
   }, delay);
 }
 
