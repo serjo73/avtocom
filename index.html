@@ -3641,7 +3641,7 @@ body.theme-dark .faq-q:hover{ background: var(--panel-2); }
 <div class="toast-host" id="toastHost"></div>
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791550870232,"version":1,"appVersion":"1.2.5","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"applicants":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true,"instructions":true,"faq":true,"wiring":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"notes":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
+<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791551251755,"version":1,"appVersion":"1.2.5","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"applicants":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true,"instructions":true,"faq":true,"wiring":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"notes":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
 <script>
 
 /* ============================================================
@@ -6618,11 +6618,6 @@ function renderToolbar(){
       return;
     }
     /* --- Список внутри подвкладок --- */
-    if (isBuildMode()){
-      /* В сборке — только просмотр */
-      const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
-      return;
-    }
     if (refTab === 'instructions'){
       tb.appendChild(makeBtn('➕ Новая запись','primary', createNewInstruction));
     } else if (refTab === 'faq'){
@@ -6641,24 +6636,20 @@ function renderToolbar(){
         saveNoteNow();
         editingNote = null; render();
       }));
-      if (!isBuildMode()){
-        tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{ saveNoteNow(); render(); }));
-        tb.appendChild(makeBtn('🎨 Цвет','',()=> cycleNoteColor(editingNote)));
-        tb.appendChild(makeBtn('📑 Теги','',()=>{
-          editTagsFor(editingNote, ()=>{ saveNoteNow(); render(); });
-        }));
-        tb.appendChild(makeBtn(
-          editingNote.pinned ? '📌 Открепить' : '📌 Закрепить',
-          '',
-          ()=> toggleNotePin(editingNote)
-        ));
-      }
+      tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{ saveNoteNow(); render(); }));
+      tb.appendChild(makeBtn('🎨 Цвет','',()=> cycleNoteColor(editingNote)));
+      tb.appendChild(makeBtn('📑 Теги','',()=>{
+        editTagsFor(editingNote, ()=>{ saveNoteNow(); render(); });
+      }));
+      tb.appendChild(makeBtn(
+        editingNote.pinned ? '📌 Открепить' : '📌 Закрепить',
+        '',
+        ()=> toggleNotePin(editingNote)
+      ));
       tb.appendChild(makeBtn('🖨 Печать','',()=>{ saveNoteNow(); window.print(); }));
       return;
     }
-    if (!isBuildMode()){
-      tb.appendChild(makeBtn('➕ Новая заметка','primary', createNewNote));
-    }
+    tb.appendChild(makeBtn('➕ Новая заметка','primary', createNewNote));
     const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
     return;
   }
@@ -7666,29 +7657,31 @@ function renderSettings(area){
   }, 30);
 
   /* ============================================================
-     4. СБОРКА САЙТА
+     4. СБОРКА САЙТА — только в админской версии
      ============================================================ */
-  const cardBuild = document.createElement('div');
-  cardBuild.className = 'conv-card';
-  cardBuild.innerHTML =
-    '<h3>📦 Сборка сайта</h3>' +
-    '<div class="subtitle">Создать самостоятельную HTML-копию приложения с выбранным набором функций. ' +
-    'Данные (документы, коммерция, курсы) в сборку не попадают — только код приложения и настройки по умолчанию. ' +
-    'Удобно передать коллеге, клиенту или выложить на другой хостинг.</div>';
+  if (!isBuildMode()){
+    const cardBuild = document.createElement('div');
+    cardBuild.className = 'conv-card';
+    cardBuild.innerHTML =
+      '<h3>📦 Сборка сайта</h3>' +
+      '<div class="subtitle">Создать самостоятельную HTML-копию приложения с выбранным набором функций. ' +
+      'Данные (документы, коммерция, курсы) в сборку не попадают — только код приложения и настройки по умолчанию. ' +
+      'Удобно передать коллеге, клиенту или выложить на другой хостинг.</div>';
 
-  const buildBtn = document.createElement('button');
-  buildBtn.className = 'btn primary';
-  buildBtn.textContent = '📦 Создать сборку';
-  buildBtn.onclick = () => showBuildDialog();
-  cardBuild.appendChild(buildBtn);
+    const buildBtn = document.createElement('button');
+    buildBtn.className = 'btn primary';
+    buildBtn.textContent = '📦 Создать сборку';
+    buildBtn.onclick = () => showBuildDialog();
+    cardBuild.appendChild(buildBtn);
 
-  const buildNote = document.createElement('div');
-  buildNote.className = 'hint';
-  buildNote.style.marginTop = '8px';
-  buildNote.textContent = 'Файл будет весить ~600 КБ (только код). Данные не выгружаются — для передачи данных используйте «Экспорт БД».';
-  cardBuild.appendChild(buildNote);
+    const buildNote = document.createElement('div');
+    buildNote.className = 'hint';
+    buildNote.style.marginTop = '8px';
+    buildNote.textContent = 'Файл будет весить ~600 КБ (только код). Данные не выгружаются — для передачи данных используйте «Экспорт БД».';
+    cardBuild.appendChild(buildNote);
 
-  wrap.appendChild(cardBuild);
+    wrap.appendChild(cardBuild);
+  }
 
     /* ============================================================
      5. ГОРЯЧИЕ КЛАВИШИ
@@ -11319,7 +11312,7 @@ function renderFaqList(area){
     }
     footer.appendChild(tagsBox);
 
-    if (!isBuildMode()){
+    {
       const editBtn = document.createElement('button');
       editBtn.className = 'card-btn primary';
       editBtn.textContent = '✏️ Редактировать';
@@ -11366,7 +11359,7 @@ function renderFaqList(area){
    FAQ — РЕДАКТОР / ПРОСМОТР
    ============================================================ */
 function renderFaqEditor(area, faq){
-  const readMode = isBuildMode() || refReadMode;
+  const readMode = false;
   const wrap = document.createElement('div'); wrap.className='instr-wrap';
   const ed = document.createElement('div'); ed.className='instr-editor' + (readMode ? ' read-mode' : '');
 
@@ -11575,7 +11568,7 @@ function renderNotesList(area){
    ЗАМЕТКИ — РЕДАКТОР / ПРОСМОТР
    ============================================================ */
 function renderNoteEditor(area, note){
-  const readMode = isBuildMode();
+  const readMode = false; 
   const col = noteColorObj(note.color);
 
   area.innerHTML = '';
@@ -11929,8 +11922,8 @@ function renderWiringList(area){
         : '');
     card.appendChild(info);
 
-    /* Действия в правом верхнем углу (только в админке) */
-    if (!isBuildMode()){
+    /* Действия в правом верхнем углу */
+    {
       const acts = document.createElement('div');
       acts.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;gap:4px;';
       card.style.position = 'relative';
@@ -11981,7 +11974,7 @@ function renderWiringList(area){
    КАРТЫ ПОДКЛЮЧЕНИЙ — РЕДАКТОР / ПРОСМОТР
    ============================================================ */
 function renderWiringEditor(area, wiring){
-  const readMode = isBuildMode();
+  const readMode = false;
   const isNew = !wiring.brand && !wiring.model && !wiring.coverImage && !wiring.gallery.length && !wiring.description;
 
   area.innerHTML = '';
