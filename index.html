@@ -3641,7 +3641,7 @@ body.theme-dark .faq-q:hover{ background: var(--panel-2); }
 <div class="toast-host" id="toastHost"></div>
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791550204218,"version":1,"appVersion":"1.2.0","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"applicants":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true,"instructions":true,"faq":true,"wiring":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"notes":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
+<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791550870232,"version":1,"appVersion":"1.2.5","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"applicants":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true,"instructions":true,"faq":true,"wiring":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"notes":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
 <script>
 
 /* ============================================================
@@ -4000,7 +4000,7 @@ try {
 /* ============================================================
    НАСТРОЙКИ ПОЛЬЗОВАТЕЛЯ
    ============================================================ */
-const APP_VERSION    = '1.2.0';
+const APP_VERSION    = '1.2.5';
 const APP_BUILD_DATE = '2026-10-07';
 const SETTINGS_KEY   = 'zakaz_naryad_settings_v1';
 
@@ -6538,19 +6538,17 @@ function renderToolbar(){
         editingApplicant = null;
         render();
       }));
-      if (!isBuildMode()){
-        tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{
-          saveApplicantNow();
-          toast('Сохранено','success');
-          render();
-        }));
-        tb.appendChild(makeBtn('📑 Теги','',()=>{
-          editTagsFor(editingApplicant, ()=>{ saveApplicantNow(); render(); });
-        }));
-        tb.appendChild(makeBtn('🏢 Сменить организацию','',()=>{
-          changeApplicantOrganization(editingApplicant);
-        }));
-      }
+      tb.appendChild(makeBtn('💾 Сохранить','primary',()=>{
+        saveApplicantNow();
+        toast('Сохранено','success');
+        render();
+      }));
+      tb.appendChild(makeBtn('📑 Теги','',()=>{
+        editTagsFor(editingApplicant, ()=>{ saveApplicantNow(); render(); });
+      }));
+      tb.appendChild(makeBtn('🏢 Сменить организацию','',()=>{
+        changeApplicantOrganization(editingApplicant);
+      }));
       tb.appendChild(makeBtn('🖨 Печать','',()=>{ saveApplicantNow(); window.print(); }));
       const sp = document.createElement('div'); sp.className='spacer'; tb.appendChild(sp);
       return;
@@ -6560,9 +6558,7 @@ function renderToolbar(){
       tb.appendChild(makeBtn('➕ Новая организация','primary',()=>editOrganization(null)));
       tb.appendChild(makeBtn('➕ Новый заявитель','',()=>createNewApplicant(null)));
     } else if (refsTab === 'applicants'){
-      if (!isBuildMode()){
-        tb.appendChild(makeBtn('➕ Новый заявитель','primary',()=>createNewApplicant(null)));
-      }
+      tb.appendChild(makeBtn('➕ Новый заявитель','primary',()=>createNewApplicant(null)));
     } else if (refsTab === 'works'){
       tb.appendChild(makeBtn('➕ Новая работа','primary',()=>editRefItem('work', null)));
     } else if (refsTab === 'materials'){
@@ -10540,7 +10536,7 @@ function renderApplicantsList(area){
     };
     actionsTd.appendChild(openBtn);
 
-    if (!isBuildMode()){
+    {
       const delBtn = document.createElement('button');
       delBtn.className = 'card-btn danger';
       delBtn.style.cssText = 'padding:5px 8px;font-size:12px;margin-left:4px;';
@@ -10569,7 +10565,7 @@ function renderApplicantsList(area){
    КАРТОЧКА ЗАЯВИТЕЛЯ — ТРИ БЛОКА
    ============================================================ */
 function renderApplicantEditor(area, applicant){
-  const readMode = isBuildMode();
+  const readMode = false;
   const org = db.organizations.find(o => o.id === applicant.organizationId);
 
   area.innerHTML = '';
@@ -16540,7 +16536,6 @@ document.addEventListener('keydown', e=>{
         console.log('[Хранилище] Занято: ' + usageMb + ' МБ из ' + quotaMb + ' МБ (IndexedDB)');
       }
     }
-    try { seedBuiltinCourses(); } catch(_){}
     /* Отрисовка */
     render();
   } catch (e){
