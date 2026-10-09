@@ -3641,7 +3641,7 @@ body.theme-dark .faq-q:hover{ background: var(--panel-2); }
 <div class="toast-host" id="toastHost"></div>
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791460812348,"version":1,"appVersion":"1.0.0","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"applicants":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true,"instructions":true,"faq":true,"wiring":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"notes":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
+<script id="__avtocom_config__" type="application/json">{"meta":{"createdAt":1791550204218,"version":1,"appVersion":"1.2.0","type":"build"},"features":{"docs":{"enabled":true,"templates":true,"documents":true},"orgs":{"enabled":true,"organizations":true,"applicants":true,"works":true,"materials":true,"print":true},"tools":{"enabled":true,"tire":true,"kw":true,"conv":true},"reference":{"enabled":true,"instructions":true,"faq":true,"wiring":true},"routes":{"enabled":false},"reports":{"enabled":true},"learning":{"enabled":true},"notes":{"enabled":true},"settings":{"enabled":true},"db":{"enabled":true,"export":true,"import":true,"storage":true}}}</script>
 <script>
 
 /* ============================================================
@@ -4011,6 +4011,7 @@ const SETTINGS_DEFAULTS = {
   updateUrl: '',         
   lastUpdateCheck: 0,       
   skippedVersion: '',          
+  dadataApiKey: '',
   profile: {
     fullName: '',
     position: '',
@@ -4025,6 +4026,7 @@ let userSettings = loadJSON(SETTINGS_KEY, null) || {};
     userSettings.profile = { ...SETTINGS_DEFAULTS.profile };
   if (!userSettings.theme)  userSettings.theme  = SETTINGS_DEFAULTS.theme;
   if (!userSettings.accent) userSettings.accent = SETTINGS_DEFAULTS.accent;
+  if (typeof userSettings.dadataApiKey !== 'string') userSettings.dadataApiKey = '';
   if (typeof userSettings.autoSaveDelay !== 'number' || userSettings.autoSaveDelay < 100)
     userSettings.autoSaveDelay = SETTINGS_DEFAULTS.autoSaveDelay;
 })();
@@ -4226,6 +4228,185 @@ function toast(msg,type){
   requestAnimationFrame(()=>el.classList.add('show'));
   setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); },3200);
 }
+
+/* ============================================================
+   DADATA — ПОИСК АДРЕСОВ
+   ============================================================ */
+async function dadataSearch(query){
+  const key = (userSettings.dadataApiKey || '').trim();
+  if (!key) throw new Error('API-ключ DaData не указан. Откройте Настройки → Интеграции');
+  if (!query || query.length < 3) return [];
+
+  const res = await fetch('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Token ' + key
+    },
+    body: JSON.stringify({ query, count: 10 })
+  });
+  if (!res.ok){
+    if (res.status === 401 || res.status === 403) throw new Error('Неверный API-ключ или он отключён');
+    if (res.status === 429) throw new Error('Превышен дневной лимит запросов');
+    throw new Error('Ошибка запроса: ' + res.status);
+  }
+  const data = await res.json();
+  return (data.suggestions || []).map(s => ({
+    fullAddress: s.value || '',
+    postalCode: (s.data && s.data.postal_code) || '',
+    region:     (s.data && s.data.region_with_type) || '',
+    city:       (s.data && (s.data.city_with_type || s.data.settlement_with_type)) || '',
+    street:     (s.data && s.data.street_with_type) || '',
+    house:      (s.data && s.data.house) || ''
+  }));
+}
+
+async function testDadataKey(){
+  const key = (userSettings.dadataApiKey || '').trim();
+  if (!key){ toast('Сначала введите API-ключ','error'); return; }
+  try {
+    const res = await fetch('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Token ' + key
+      },
+      body: JSON.stringify({ query: 'Москва, Кремль', count: 1 })
+    });
+    if (res.ok) toast('✅ Ключ работает','success');
+    else if (res.status === 401 || res.status === 403) toast('❌ Неверный ключ','error');
+    else if (res.status === 429) toast('⚠ Дневной лимит исчерпан','error');
+    else toast('⚠ Ошибка ' + res.status,'error');
+  } catch(e){
+    toast('Ошибка сети: ' + e.message,'error');
+  }
+}
+
+/* ============================================================
+   МОДАЛКА ПОИСКА АДРЕСА
+   ============================================================ */
+function openAddressSearchDialog(onPick){
+  const key = (userSettings.dadataApiKey || '').trim();
+  if (!key){
+    toast('Сначала добавьте API-ключ DaData в Настройках → Интеграции','error');
+    return;
+  }
+
+  const ov = document.createElement('div');
+  ov.className = 'modal-overlay';
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.maxWidth = '640px';
+  modal.style.display = 'flex';
+  modal.style.flexDirection = 'column';
+  modal.style.maxHeight = '85vh';
+
+  const h = document.createElement('h3');
+  h.textContent = '🔍 Поиск адреса';
+  h.style.marginBottom = '6px';
+  modal.appendChild(h);
+
+  const sub = document.createElement('p');
+  sub.style.cssText = 'margin:0 0 12px;font-size:12.5px;color:var(--text-2);line-height:1.5;';
+  sub.textContent = 'Введите индекс, город, улицу или полный адрес — например «450106 Уфа» или «Дуванский бульвар 30».';
+  modal.appendChild(sub);
+
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.placeholder = 'Например: 450106 Уфа Дуванский';
+  inp.style.cssText =
+    'width:100%;padding:12px 14px;border:1px solid var(--border-2);border-radius:10px;' +
+    'font:inherit;font-size:14px;background:#fff;color:var(--text);margin-bottom:12px;';
+  modal.appendChild(inp);
+
+  const results = document.createElement('div');
+  results.style.cssText = 'flex:1;overflow-y:auto;min-height:120px;max-height:50vh;';
+  modal.appendChild(results);
+
+  const actions = document.createElement('div');
+  actions.className = 'modal-actions';
+  const cancel = document.createElement('button');
+  cancel.textContent = 'Отмена';
+  cancel.onclick = () => ov.remove();
+  actions.appendChild(cancel);
+  modal.appendChild(actions);
+
+  ov.appendChild(modal);
+  ov.onclick = e => { if (e.target === ov) ov.remove(); };
+  document.body.appendChild(ov);
+
+  setTimeout(() => inp.focus(), 50);
+
+  let timer = null;
+  let lastQuery = '';
+
+  function renderEmpty(text){
+    results.innerHTML =
+      '<div style="padding:30px 20px;text-align:center;color:var(--text-3);font-size:13px;">' +
+        escapeHtml(text) +
+      '</div>';
+  }
+  renderEmpty('Начните вводить адрес…');
+
+  inp.addEventListener('input', () => {
+    clearTimeout(timer);
+    const q = inp.value.trim();
+    if (q.length < 3){
+      renderEmpty('Введите минимум 3 символа');
+      return;
+    }
+    timer = setTimeout(async () => {
+      lastQuery = q;
+      results.innerHTML =
+        '<div style="padding:20px;text-align:center;color:var(--text-3);">⏳ Ищу…</div>';
+      try {
+        const list = await dadataSearch(q);
+        if (lastQuery !== q) return;
+        if (!list.length){
+          renderEmpty('Ничего не найдено. Уточните запрос.');
+          return;
+        }
+        results.innerHTML = '';
+        list.forEach(item => {
+          const row = document.createElement('div');
+          row.style.cssText =
+            'padding:10px 14px;border-radius:8px;cursor:pointer;margin-bottom:4px;' +
+            'transition:background .12s;border:1px solid transparent;';
+          row.onmouseenter = () => {
+            row.style.background = 'var(--panel-2)';
+            row.style.borderColor = 'var(--border)';
+          };
+          row.onmouseleave = () => {
+            row.style.background = '';
+            row.style.borderColor = 'transparent';
+          };
+          row.innerHTML =
+            '<div style="font-size:13.5px;font-weight:600;color:var(--text);">' +
+              escapeHtml(item.fullAddress) +
+            '</div>' +
+            '<div style="font-size:11.5px;color:var(--text-3);margin-top:3px;">' +
+              [item.postalCode, item.region, item.city].filter(Boolean).join(' · ') +
+            '</div>';
+          row.onclick = () => {
+            ov.remove();
+            onPick && onPick(item);
+          };
+          results.appendChild(row);
+        });
+      } catch(e){
+        if (lastQuery !== q) return;
+        renderEmpty('⚠ ' + e.message);
+      }
+    }, 400);
+  });
+
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Escape') ov.remove();
+  });
+}
+
 /* ============================================================
    КОПИРОВАНИЕ В БУФЕР
    ============================================================ */
@@ -4410,7 +4591,12 @@ document.addEventListener('scroll', e => {
 const ORG_FIELDS = [
   {key:'name',label:'Наименование',short:'Наименование'},
   {key:'shortName',label:'Краткое наименование',short:'Краткое'},
-  {key:'address',label:'Адрес',short:'Адрес'},
+  {key:'postalCode',label:'Индекс',short:'Индекс'},
+  {key:'addressRegion',label:'Регион',short:'Регион'},
+  {key:'addressCity',label:'Город / нас. пункт',short:'Город'},
+  {key:'addressStreet',label:'Улица',short:'Улица'},
+  {key:'addressHouse',label:'Дом / корпус / офис',short:'Дом'},
+  {key:'address',label:'Адрес (полная строка)',short:'Адрес'},
   {key:'inn',label:'ИНН',short:'ИНН'},
   {key:'ogrn',label:'ОГРН',short:'ОГРН'},
   {key:'kpp',label:'КПП',short:'КПП'},
@@ -4428,6 +4614,7 @@ function orgFieldShort(k){ const f=ORG_FIELDS.find(x=>x.key===k); return f?f.sho
 function defaultOrganization(){
   return {
     id:uid(), name:'', shortName:'', address:'',
+    postalCode:'', addressRegion:'', addressCity:'', addressStreet:'', addressHouse:'',
     inn:'', ogrn:'', kpp:'', phone:'', email:'',
     director:'', accountant:'', bank:'', bik:'',
     account:'', corrAccount:'',
@@ -4995,6 +5182,11 @@ function normalizeApplicant(a){
   if (!a || typeof a !== 'object') return a;
   const str = (k, def='') => { if (typeof a[k] !== 'string') a[k] = def; };
   str('organizationId');
+  str('postalCode');
+  str('addressRegion');
+  str('addressCity');
+  str('addressStreet');
+  str('addressHouse');
   str('lastName'); str('firstName'); str('middleName');
   str('birthDate');
   str('gender');    
@@ -6996,6 +7188,39 @@ function editOrganization(org){
   const ov = document.createElement('div'); ov.className='modal-overlay';
   const modal = document.createElement('div'); modal.className='modal';
   modal.innerHTML = `<h3>${isNew?'🏢 Новая организация':'✏️ Редактирование организации'}</h3>`;
+  /* Кнопка умного поиска адреса */
+  const _inputs = {};
+  const searchRow = document.createElement('div');
+  searchRow.style.cssText =
+    'display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;' +
+    'background:var(--panel-2);border-radius:8px;';
+  const searchLbl = document.createElement('span');
+  searchLbl.style.cssText = 'font-size:12.5px;color:var(--text-2);font-weight:600;flex:1;';
+  searchLbl.textContent = 'Заполнить адрес автоматически:';
+  searchRow.appendChild(searchLbl);
+
+  const searchBtn = document.createElement('button');
+  searchBtn.type = 'button';
+  searchBtn.className = 'btn primary';
+  searchBtn.textContent = '🔍 Найти через DaData';
+  searchBtn.onclick = () => {
+    openAddressSearchDialog((result) => {
+      o.postalCode = result.postalCode;
+      o.addressRegion = result.region;
+      o.addressCity = result.city;
+      o.addressStreet = result.street;
+      o.addressHouse = result.house;
+      o.address = result.fullAddress;
+      /* Обновить все видимые поля формы */
+      Object.keys(_inputs).forEach(k => {
+        if (_inputs[k]) _inputs[k].value = o[k] || '';
+      });
+      toast('Адрес заполнен','success');
+    });
+  };
+  searchRow.appendChild(searchBtn);
+  modal.appendChild(searchRow);
+
   const grid = document.createElement('div'); grid.className='org-form-grid';
   ORG_FIELDS.forEach(f=>{
     const wrap = document.createElement('div');
@@ -7005,6 +7230,7 @@ function editOrganization(org){
     if (f.key === 'address'){ inp = document.createElement('textarea'); inp.value = o[f.key] || ''; }
     else { inp = document.createElement('input'); inp.type='text'; inp.value = o[f.key] || ''; }
     inp.oninput = ()=>{ o[f.key] = inp.value; };
+    _inputs[f.key] = inp;
     wrap.appendChild(lbl); wrap.appendChild(inp);
     grid.appendChild(wrap);
   });
@@ -7624,6 +7850,77 @@ function renderSettings(area){
   wrap.appendChild(cardUpd);
 
   /* ============================================================
+     ИНТЕГРАЦИИ
+     ============================================================ */
+  const cardIntegrations = document.createElement('div');
+  cardIntegrations.className = 'conv-card';
+  cardIntegrations.innerHTML =
+    '<h3>🔗 Интеграции</h3>' +
+    '<div class="subtitle">Подключение внешних сервисов. Все ключи хранятся локально ' +
+    'в вашем браузере и не передаются третьим лицам.</div>';
+
+  const integGrid = document.createElement('div');
+  integGrid.className = 'org-form-grid';
+
+  const apiRow = document.createElement('div');
+  apiRow.className = 'full';
+  apiRow.innerHTML = '<label>API-ключ DaData (для умного поиска адресов)</label>';
+
+  const apiWrap = document.createElement('div');
+  apiWrap.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;';
+
+  const apiInp = document.createElement('input');
+  apiInp.type = 'password';
+  apiInp.value = userSettings.dadataApiKey || '';
+  apiInp.placeholder = 'Вставьте ключ из личного кабинета dadata.ru';
+  apiInp.style.cssText = 'flex:1;min-width:220px;padding:8px 11px;border:1px solid var(--border-2);border-radius:7px;font:inherit;font-size:13.5px;';
+  apiInp.autocomplete = 'off';
+  apiInp.oninput = () => {
+    userSettings.dadataApiKey = apiInp.value.trim();
+    saveUserSettings();
+  };
+  apiWrap.appendChild(apiInp);
+
+  const showBtn = document.createElement('button');
+  showBtn.type = 'button';
+  showBtn.className = 'btn';
+  showBtn.textContent = '👁';
+  showBtn.title = 'Показать / скрыть';
+  showBtn.onclick = () => {
+    apiInp.type = apiInp.type === 'password' ? 'text' : 'password';
+  };
+  apiWrap.appendChild(showBtn);
+
+  const testBtn = document.createElement('button');
+  testBtn.type = 'button';
+  testBtn.className = 'btn primary';
+  testBtn.textContent = '🧪 Проверить';
+  testBtn.onclick = async () => {
+    testBtn.disabled = true;
+    const old = testBtn.textContent;
+    testBtn.textContent = '⏳ Проверяю…';
+    await testDadataKey();
+    testBtn.disabled = false;
+    testBtn.textContent = old;
+  };
+  apiWrap.appendChild(testBtn);
+
+  apiRow.appendChild(apiWrap);
+  integGrid.appendChild(apiRow);
+  cardIntegrations.appendChild(integGrid);
+
+  const apiHint = document.createElement('div');
+  apiHint.className = 'hint';
+  apiHint.style.marginTop = '10px';
+  apiHint.innerHTML =
+    'Получите бесплатный ключ на <a href="https://dadata.ru/" target="_blank" rel="noopener" ' +
+    'style="color:var(--primary);">dadata.ru</a>. Бесплатно — до 10 000 запросов в сутки. ' +
+    'Кнопка «🧪 Проверить» отправит тестовый запрос «Москва, Кремль».';
+  cardIntegrations.appendChild(apiHint);
+
+  wrap.appendChild(cardIntegrations);
+
+  /* ============================================================
      6. О ПРОГРАММЕ
      ============================================================ */
 
@@ -7854,6 +8151,11 @@ function applyImportedSettings(imported){
   /* URL обновлений — опционально, обычно не переносим */
   if (imported.updateUrl && typeof imported.updateUrl === 'string'){
     userSettings.updateUrl = imported.updateUrl;
+  }
+
+  /* API-ключ DaData */
+  if (typeof imported.dadataApiKey === 'string'){
+    userSettings.dadataApiKey = imported.dadataApiKey;
   }
 
   saveUserSettings();
@@ -10441,7 +10743,64 @@ function renderApplicantEditor(area, applicant){
     editable: true, readMode,
     onChange: v => { applicant.email = v; applicant.updatedAt = Date.now(); saveDB(); }
   }));
-  repBody.appendChild(makeFieldRow('Адрес', applicant.address, {
+  /* Кнопка умного поиска */
+  if (!readMode){
+    const searchTr = document.createElement('tr');
+    searchTr.style.cssText = 'border-bottom:1px solid var(--border);';
+
+    const searchTd1 = document.createElement('td');
+    searchTd1.style.cssText = 'padding:9px 12px;width:220px;color:var(--text-2);font-size:13px;';
+    searchTd1.textContent = 'Заполнить адрес';
+    searchTr.appendChild(searchTd1);
+
+    const searchTd2 = document.createElement('td');
+    searchTd2.colSpan = 2;
+    searchTd2.style.cssText = 'padding:9px 12px;';
+
+    const searchBtn = document.createElement('button');
+    searchBtn.className = 'btn primary';
+    searchBtn.textContent = '🔍 Найти через DaData';
+    searchBtn.onclick = () => {
+      openAddressSearchDialog((result) => {
+        applicant.postalCode = result.postalCode;
+        applicant.addressRegion = result.region;
+        applicant.addressCity = result.city;
+        applicant.addressStreet = result.street;
+        applicant.addressHouse = result.house;
+        applicant.address = result.fullAddress;
+        applicant.updatedAt = Date.now();
+        saveDB();
+        render();
+        toast('Адрес заполнен','success');
+      });
+    };
+    searchTd2.appendChild(searchBtn);
+    searchTr.appendChild(searchTd2);
+
+    repBody.appendChild(searchTr);
+  }
+
+  repBody.appendChild(makeFieldRow('Индекс', applicant.postalCode || '', {
+    editable: true, readMode, placeholder: '450106',
+    onChange: v => { applicant.postalCode = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Регион', applicant.addressRegion || '', {
+    editable: true, readMode,
+    onChange: v => { applicant.addressRegion = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Город / населённый пункт', applicant.addressCity || '', {
+    editable: true, readMode,
+    onChange: v => { applicant.addressCity = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Улица', applicant.addressStreet || '', {
+    editable: true, readMode,
+    onChange: v => { applicant.addressStreet = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Дом / корпус / квартира', applicant.addressHouse || '', {
+    editable: true, readMode,
+    onChange: v => { applicant.addressHouse = v; applicant.updatedAt = Date.now(); saveDB(); }
+  }));
+  repBody.appendChild(makeFieldRow('Адрес (полная строка)', applicant.address || '', {
     editable: true, readMode,
     onChange: v => { applicant.address = v; applicant.updatedAt = Date.now(); saveDB(); }
   }));
