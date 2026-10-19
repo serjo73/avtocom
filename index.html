@@ -10542,7 +10542,7 @@ function renderSettings(area){
   layoutLbl.textContent = 'Интерфейс:';
   layoutRow.appendChild(layoutLbl);
 
-  [['modern', '🖥 Современный (Sidebar)'], ['classic', '📑 Классический (Табы)']].forEach(([v, t]) => {
+  [['modern', '🖥 Современный'], ['classic', '📑 Классический']].forEach(([v, t]) => {
     const b = document.createElement('button');
     b.className = 'btn' + (userSettings.uiLayout === v ? ' primary' : '');
     b.textContent = t;
